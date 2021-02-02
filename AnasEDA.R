@@ -5,3 +5,7 @@ data(Fatalities)
 head(Fatalities)
 
 str(Fatalities)
+
+
+#HELLO!
+dim(Fatalities)

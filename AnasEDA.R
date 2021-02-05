@@ -1,4 +1,5 @@
 
+## eda 
 library(ggplot2)
 library(viridis)
 data(Fatalities)

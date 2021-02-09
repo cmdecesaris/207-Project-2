@@ -1,0 +1,64 @@
+---
+title: "TITLE PROJECT 2"
+author: "Team 3; Group 1"
+date: "02/09/2021"
+output:
+  html_document:
+    df_print: paged
+    number_sections: yes
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+***
+
+# Abstract 
+
+
+# Introduction
+
+ 
+# Background 
+
+
+# Descriptive analysis 
+
+
+# Inferential analysis 
+
+##depiction of the models we use in statistical terms
+
+# Sensitivity analysis 
+
+#Causal Inference
+
+# Discussion 
+
+<span style='color:blue'> 
+Conclude your analysis in this section. You can touch on the following topics. 
+</span> 
+
+- A brief recap of this project. 
+- Findings in the inferential analysis interpreted in the context of Project STAR. 
+- Suggestions for future research and/or policy making given your findings. 
+- Caveats of the current analysis.
+
+# Acknowledgement {-}
+
+<span style='color:blue'>
+By default, it is assumed that you have discussed this project with your teammates and instructors. List any other people that you have discussed this project with. 
+</span>
+
+# Reference {-}
+
+
+# Session info {-}
+
+<span style='color:blue'>
+Report information of your `R` session for reproducibility. 
+</span> 
+
+```{r}
+sessionInfo()
+```

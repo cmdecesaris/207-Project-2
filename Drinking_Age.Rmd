@@ -1,0 +1,163 @@
+---
+title: "Drinking_Age"
+name: "Mary-Francis LaPorte"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exploratory Data Analysis
+
+```{r Libraries}
+library(tidyverse)
+library(dplyr)
+library(AER)
+library(agricolae)
+library(lme4)
+```
+
+
+```{r}
+data(Fatalities)
+head(Fatalities)
+```
+
+```{r}
+drinking_age <- Fatalities$drinkage
+alcohol_fat <- Fatalities$afatal
+night_youth<- Fatalities$fatal1517
+night_YA <- Fatalities$fatal1820
+night_legal <- Fatalities$fatal2124
+
+a_rate <-  Fatalities$afatal/Fatalities$pop
+Fatalities <- cbind(Fatalities,a_rate)
+
+hist(drinking_age)
+
+par(mfrow=c(2,2))
+plot(drinking_age,alcohol_fat)
+plot(drinking_age,night_youth)
+plot(drinking_age,night_YA)
+plot(drinking_age,night_legal)
+par(mfrow=c(1,1))
+
+alc_age <- lm(a_rate~as.factor(drinking_age))
+plot(alc_age)
+
+Fatalities[281:283,]
+newdata <- Fatalities[order(-Fatalities$afatal),]
+
+anova_fat <- aov(a_rate~as.factor(drinking_age), data = Fatalities)
+summary(anova_fat)
+
+
+anova_fat_state <- aov(a_rate~as.factor(drinking_age)*as.factor(state), data = Fatalities)
+summary(anova_fat_state)
+
+anova_fat_state <- aov(a_rate~as.factor(drinking_age)+as.factor(state), data = Fatalities)
+summary(anova_fat_state)
+
+plot(anova_fat_state)
+Fatalities[112,]
+Fatalities[211,]
+Fatalities[which(Fatalities$state == "la"),]
+
+
+```
+
+
+```{r}
+library("RColorBrewer")
+library("gtrendsR")
+library("tidyverse")
+library("usmap")
+```
+
+```{r}
+
+#1982 1983 1984 1985 1986 1987 1988
+
+yearsets <- c(1982,1983,1984,1985,1986,1987,1988)
+
+year = 1982
+  data <- Fatalities[which(Fatalities$year == year),]
+
+plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per capita", label = scales::comma, limits = c(0.000025,0.00020)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Source: @littlemissdata blog")
+
+year = 1983
+  data <- Fatalities[which(Fatalities$year == year),]
+
+
+plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Source: @littlemissdata blog")
+
+year = 1984
+  data <- Fatalities[which(Fatalities$year == year),]
+
+plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Source: @littlemissdata blog")
+year = 1985
+
+  data <- Fatalities[which(Fatalities$year == year),]
+
+plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Source: @littlemissdata blog")
+year = 1986
+
+  data <- Fatalities[which(Fatalities$year == year),]
+
+plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Source: @littlemissdata blog")
+year = 1987
+
+  data <- Fatalities[which(Fatalities$year == year),]
+
+plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Source: @littlemissdata blog")
+
+year = 1988
+
+  data <- Fatalities[which(Fatalities$year == year),]
+
+plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Source: @littlemissdata blog")
+
+```
+
+
+
+
+
+
+

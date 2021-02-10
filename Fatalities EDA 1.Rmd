@@ -9,16 +9,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r Libraries}
+```{r Libraries, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(dplyr)
 library(AER)
 library(agricolae)
-
+library(car)
+library(DT)
 ```
 
+
+```{r Load Data, include=FALSE}
 # Load and clean data
-```{r Load Data}
 data(Fatalities)
 head(Fatalities)
 
@@ -37,82 +39,133 @@ Fatalities = drop_na(Fatalities)
 dim(Fatalities) #335 x 34
 ```
 
-# Wrangling/playing around
-Trying different things to make new datasets and metric for predictions
-
-```{r}
-cor(Fatalities[sapply(Fatalities, is.numeric)])
-```
-
-## 
-**Some features**
-
-- unemp: unemployment rate
-- emppop: employment population ratio
-- beertax: tax on case of beer
-- drinkage: minimal legal drinking age
-- youngdrivers: percent of drivers 14-24
-- miles: avg miles per driver
-- jail: mandatory jail sentence? y/n
-- service: mandatory community service
-- fatal: number of vehical fatalities
-- fatal@@##: represents the number of vehical fatalities from ages @@-##
-- afatal: alcohol-involved vehical fatalities
-- pop: population total
-- pop@@##: represents the number of people from ages @@-##
-- spirits: spirit consumption
-- year: year
-- state: state
-
-```{r}
+```{r Add Ratios, include=FALSE}
 #head(Fatalities)
 
 afatal_fatal = Fatalities
-afatal_fatal$afatal_ratio= afatal_fatal$afatal/afatal_fatal$fatal #creates a ratio for each instance of alchol related veh fatalties/ total veh fatalities
+afatal_fatal$af_ratio= (afatal_fatal$afatal/afatal_fatal$fatal) #creates a ratio for each instance of alcohol related  fatalities/ total fatalities per 100k people
 
-afatal_fatal$unemp_ratio= afatal_fatal$unemp/afatal_fatal$unempus #creates a ratio for each instance of numeric. Unemployment rate./ US unemployment/population ratio.
-
-
-afatal_fatal$emp_ratio= afatal_fatal$emppop/afatal_fatal$emppopus #creates a ratio for each instance of numeric. (Employment/population ratio)/ (US employment/population ratio
+afatal_fatal$ap_ratio= (afatal_fatal$afatal/afatal_fatal$pop)*100000 #per 100k people
+afatal_fatal
 ```
 
+
+
+```{r Final Predicting Set,include=FALSE}
+af=afatal_fatal %>%dplyr::select(state,year,miles,jail,breath,service,af_ratio,ap_ratio) 
+
+af
+
+
+af_state=af%>% group_by(state,jail,service,breath)%>%summarize(mean_af = mean(af_ratio), mean_ap=mean(ap_ratio))
+af_state
+af
+af_state_graph=af%>% group_by(state,jail)%>%summarize(mean_af = mean(af_ratio), mean_ap=mean(ap_ratio))
+
+
+yes_no
+af%>%filter(year=='1983'&jail=='yes')%>%summarize(mean(ap_ratio))
+
+
+
+af_year=af%>% group_by(year,jail,service,breath)%>%summarize(mean_af = mean(af_ratio), mean_ap=mean(ap_ratio))
+af_year_graph=af%>% group_by(year,jail)%>%summarize(mean_af = mean(af_ratio), mean_ap=mean(ap_ratio))
+
+af_year_graph
+
+af %>% group_by(state,jail,service, breath)%>% 
+  count(state, jail) %>% rename(Total_Jail= n)
+
+af %>% group_by(state,service)%>% 
+  count(state, service) %>% rename(Total_Service= n)
+
+tot_jail_year=af %>% group_by(year,jail)%>% 
+  count(year, jail) %>% rename(Total_Jail= n)
+
+tot_serv_year=af %>% group_by(year,service)%>% 
+  count(year, service) %>% rename(Total_Service= n)
+
+
+
+af_yearx=merge(tot_jail_year,af_year)
+af_year
+
+
+```
+
+```{r, Visualization of Set}
+
+datatable(af,class = 'cell-border stripe', 
+ caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table X: ', htmltools::em('XXXXX')), colnames= )
+
+
+datatable(af_year,class = 'cell-border stripe', 
+ caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table X: ', htmltools::em('XXXXX')), colnames= )
+
+
+datatable(af_state,class = 'cell-border stripe', 
+ caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table X: ', htmltools::em('XXXXX')), colnames= )
+```
+
+```{r State Lolipops, fig.width=15}
+
+ggplot(af_state_graph, aes(factor(state), mean_af )) + geom_point(aes(color = factor(jail)),size=3 )+labs(x="State", y="Mean Alcohol Fatalities/Fatalities",  
+       col="Jail Sentence?",title="Mean Alcohol Fatalities/Fatalities by State")+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))+theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
+
+
+
+
+ggplot(af_state_graph, aes(factor(state), mean_ap )) + geom_point(aes(color = factor(jail)),size=3 )+labs(x="State", y="Mean Alcohol Fatalities/Pop by State",  
+       col="Jail Sentence?",title="Mean Alcohol Fatalities/Pop by Jail")+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))+theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
+```
+
+```{r Year Lolipops, fig.width=15}
+
+ggplot(a, aes(factor(state), ap_ratio )) + geom_point(aes(shape = factor(jail),color=factor(year)),size=3 )+labs(x="State", y="Mean Alcohol Fatalities/Fatalities",  
+       col="Jail Sentence?",title="Mean Alcohol Fatalities/Fatalities by State")+theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
+
+
+af_year_graph
+
+ggplot(a, aes(factor(year), ap_ratio )) + geom_point(aes(shape = factor(jail),color=factor(state)),size=3 )+labs(x="Year", y="Mean Alcohol Fatalities/Pop by Jail Status",  
+       col="Jail Sentence?",title="Mean Alcohol Fatalities/Pop by Year per 10k")+  theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
+```
 ```{r}
 
+ggplot(af, aes(factor(state), ap_ratio )) + geom_point(aes(shape = factor(jail),color=factor(year)),size=3 )+labs(x="State", y="Mean Alcohol Fatalities/Fatalities",  
+       col="Jail Sentence?",title="Mean Alcohol Fatalities/Fatalities by State")+theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
 
-jail_sum=afatal_fatal%>%group_by(state,jail) %>%
-  summarize(mean_drinkage = signif(mean(drinkage, na.rm = TRUE), digits=5), mean_afatal_ratio= signif(mean(afatal_ratio, na.rm = TRUE), digits=5)) #Mean drinking age across states
 
 
-breath_sum=afatal_fatal%>%group_by(state,breath) %>%
-  summarize(mean_drinkage = signif(mean(drinkage, na.rm = TRUE), digits=5), mean_afatal_ratio= signif(mean(afatal_ratio, na.rm = TRUE), digits=5))
 
-service_sum=afatal_fatal%>%group_by(state,service) %>%
-  summarize(mean_drinkage = signif(mean(drinkage, na.rm = TRUE), digits=5), mean_afatal_ratio= signif(mean(afatal_ratio, na.rm = TRUE), digits=5))
-```
-
-```{r}
-(afatal_fatal) #note an umemp_ratio >1 means this for this year, this state has exceeded the total us unemployment rate
-
-#afatal ratio cannot exceed 1 because it is the ratio for that state, for that year of the amount of alcohol related veh deaths/total veh deaths
+ggplot(b, aes(factor(year), ap_ratio )) + geom_point(aes(shape = factor(jail),color=factor(state)),size=3 )+labs(x="Year", y="Mean Alcohol Fatalities/Pop by Jail Status",  
+       col="Jail Sentence?",title="Mean Alcohol Fatalities/Pop by Year per 10k")+  theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
 ```
 
 
-```{r Unemployment ratio box plot, fig.width=15}
-
-ggplot(afatal_fatal, aes(factor(state), unemp_ratio, fill=factor(state))) + geom_boxplot()+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+theme(text = element_text(size=14,face = 'bold'),
-        axis.text.x = element_text(angle=15, hjust=1),axis.ticks.x = element_line(size=0.5))
-
-```
 
 
-```{r Basic Box plot showing the spread of afatal/population size, fig.width=15}
-#ratio of alchol related vehicle fatalities/ population~~over the span of study years
 
-ggplot(afatal_fatal, aes(factor(state), afatal_ratio, fill=factor(state))) + geom_boxplot()+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+theme(text = element_text(size=14,face = 'bold'),
-        axis.text.x = element_text(angle=15, hjust=1),axis.ticks.x = element_line(size=0.5))
 
-#
-```
+
+
+
+
+
+
+
 ```{r Basic Box plot showing the spread of afatal/carfatalities size, fig.width=15}
 
 #This is a RATIO of Alcohol related vehical fatalites/ all vehical fatalities
@@ -121,108 +174,91 @@ ggplot(afatal_fatal, aes(factor(state), afatal/fatal, fill=factor(state))) + geo
 
 #
 ```
+```{r Transformations}
+#transformations
+hist(af$af_ratio)#skewws right
+hist(log(af$af_ratio))#better
+
+hist(af$ap_ratio)#skewws right
+hist(log(af$ap_ratio))#better
+
+hist(af_year$mean_ap)
+hist(af_year$mean_af)
+```
+
 
 
 
 ## Models
-```{r One-Way factor models}
-#One way anova mean-alchol fatality ratio on factor(jail)
-anova.jail = aov(mean_afatal_ratio~factor(jail),jail_sum)
-summary(anova.jail) #a difference across ratios for state,
-anova.jail$coef #having jail as yes increases the predicted
 
+To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the united states. 
 
-#One way anova mean-alchol fatality ratio on factor(breath)
-anova.breath = aov(mean_afatal_ratio~factor(breath),breath_sum)
-summary(anova.breath) #a difference across ratios for state,
-anova.breath$coef #having breath as yes decreases the predicted?
+In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. 
 
-#One way anova mean-alchol fatality ratio on factor(service)
-anova.service = aov(mean_afatal_ratio~factor(service),service_sum)
-summary(anova.service) #a difference across ratios for state,
-anova.service$coef #having service as yes decreases the predicted?
-```
-```{r}
-
-```
-
-
-
-```{r, some factorial linear models}
-#head(afatal_fatal)
-mod_states = lm(afatal_ratio~factor(state),afatal_fatal)
-mod_states
-summary(mod_states) #interesting but not very telling
-
-
-mod_beertax = lm(afatal_ratio~beertax,afatal_fatal)
-mod_beertax
-summary(mod_beertax) #not great model
-
-mod_statebeer= lm(afatal_ratio~beertax*factor(state),afatal_fatal)
-mod_statebeer
-summary(mod_statebeer)#not great either
-```
-
-```{r}
-#transformations
-hist(afatal_fatal$afatal_ratio)#skewws right
-hist(log(afatal_fatal$afatal_ratio))#better
-
-hist(afatal_fatal$afatal)
-
-hist(afatal_fatal$beertax) 
-```
-
-```{r}
-mod2=lm(afatal_ratio~ beertax+drinkage, afatal_fatal)
-
-mod2 #increased drinking age causes a decrease in our ratio
-
-par(mfrow-c(2,2))
-plot(mod2)
-```
-
-
-## Feature selection fun
-
-**Normally use a training testing set!!!**
-```{r}
-#afatal_fatal
-sub_ratio=afatal_fatal[, !(colnames(afatal_fatal) %in% c("fatal","afatal","emppop","emppopus","baptist","mormon"))]#drop these cols to avoid multicolinearity, drop religions here as well
-
-
-none_mod = lm(log(afatal_ratio)~1, data=sub_ratio) 
-full_mod = lm(log(afatal_ratio)~., data=sub_ratio)  
-library(MASS)
-#summary(full_mod)
-#forward selection based on AIC: 
-lm.step=stepAIC(none_mod, scope=list(upper=full_mod, lower = ~1), direction="both", k=2, trace = FALSE)
-lm.step
-
-```
 
 
 ```{r}
-summary(lm.step)
-par(mfrow=c(2,2))
-plot(lm.step)
-```
-```{r}
-plot(lm.step,which=2) #transformation might be needed yo
-plot(lm.step,which=4) #149 causing a mess
+south= af%>%filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ar","ok","ky","wv","va"))
+
+
+n_east= af%>%filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
+
 ```
 
 
-## Extra model investigation
 
-```{r}
-mod2=lm(formula = log(afatal_ratio) ~ state + sfatal + income + emp_ratio + 
-    factor(jail) + factor(service) + fatal1517 + miles, data = sub_ratio)
+```{r Using Ratios for Each Combo + Interactions}
 
+anova.k = lm(log(ap_ratio)~factor(state)+factor(year)
++factor(jail)+factor(breath)+factor(service)+miles
+,south)
+anova(anova.k)
+summary(anova.k)
+anova.k$coef
+plot(anova.k)
 
-summary(mod2)
+anova.ki = lm((log(ap_ratio))~factor(state)+factor(year)+miles+
+factor(jail)*factor(service)*factor(breath),south)
+summary(anova.ki)
+anova(anova.ki)
+anova.ki$coef
+plot(anova.ki)
+
+anova.k = lm(log(ap_ratio)~factor(state)+(year)
++factor(jail)+factor(breath)+factor(service)
++miles
+,n_east)
+anova(anova.k)
+summary(anova.k)
+anova.k$coef
+plot(anova.k)
+
+anova.ki = lm((log(ap_ratio))~factor(state)+factor(year)+factor(jail)*factor(service)*factor(breath),n_east)
+summary(anova.ki)
+anova.ki$coef
+anova(anova.ki)
+plot(anova.ki)
 ```
+
+
+
+
+```{r Interactions Significant?}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

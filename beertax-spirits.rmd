@@ -1,0 +1,124 @@
+author: "Cameron Shinn"
+date: "2/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Libraries}
+library(tidyverse)
+library(dplyr)
+library(AER)
+library(agricolae)
+library(ggplot2)
+library(GGally)
+library(zoo)
+```
+
+# Load and clean data
+```{r Load Data}
+data(Fatalities)
+head(Fatalities)
+
+str(Fatalities)
+
+dim(Fatalities) #336 x 34
+
+which(is.na(Fatalities)) #4732, 5068
+apply(is.na(Fatalities), 2, which) #missing data at jail: row 28, service: row 28
+
+Fatalities[28,] #consider dropping 28.
+#yeah let's drop it
+
+Fatalities = drop_na(Fatalities)
+
+dim(Fatalities) #335 x 34
+```
+
+```{r}
+Fatalities$afatalper10k <- (Fatalities$afatal / Fatalities$pop) * 10000
+Fatalities$afatalper100kmiles <- (Fatalities$afatal / Fatalities$milestot) * 100000
+Fatalities <- Fatalities[c("year", "state", "spirits", "beertax", "afatalper10k")]
+avg_fatalities <- aggregate(.~state, Fatalities[c("state", "spirits", "beertax", "afatalper10k")], mean)
+head(avg_fatalities)
+ggpairs(avg_fatalities[c("spirits", "beertax", "afatalper10k")])
+avg_fatalities
+```
+
+```{r}
+full_model <- lm(afatalper10k~beertax+spirits+beertax*spirits, avg_fatalities)
+reduced_model <- lm(afatalper10k~beertax+spirits, avg_fatalities)
+summary(full_model)
+summary(reduced_model)
+anova(reduced_model, full_model)
+# Use reduced model
+```
+
+```{r}
+# p_values <- data.frame(state=factor(), p_value=double())
+
+# for (state_name in levels(Fatalities$state)) {
+#     summ <- summary(lm(afatalper10k~beertax, subset(Fatalities, state == state_name)))
+#     print(summ$coefficients[2, 4])
+#     # p_values <- rbind(p_values, c(state=state_name, p_values=summ$coefficients[2, 4]))
+#     # print(summ$coefficients[2, 4])
+#     # print(rbind(p_values, c(state=state_name, p_values=summ$coefficients[2, 4])))
+# }
+
+# head(p_values)
+```
+
+```{r}
+# Obtain the residuals from the ANOVA fit
+residuals <- reduced_model$residuals
+hist(residuals)
+# Semistudentized residuals
+mse <- sum(reduced_model$residuals^2)/reduced_model$df.residual
+residuals.semistd <- reduced_model$residuals/sqrt(mse)
+hist(residuals.semistd)
+# Studentized residuals
+# ns <- as.numeric(table(avg_fatalities$state))
+# weights <- 1 - 1 / ns[as.numeric(avg_fatalities$state)]
+# residuals.std <- reduced_model$residuals/sqrt(mse)/sqrt(weights)
+# hist(residuals.std)
+```
+
+```{r}
+# Checking the ranges on beertax and afatalper10k
+beertax_ranges <- aggregate(.~state, Fatalities[c("state", "beertax", "afatalper10k")], function(x) max(x) - min(x))
+beertax_ranges[with(beertax_ranges, order(beertax)),]
+new_model <- aov(afatalper10k~beertax+state+state*beertax, Fatalities)
+summary(new_model)
+```
+
+```{r}
+# Try examining YoY changes
+Fatalities$year <- as.Date(ISOdate(Fatalities$year, 12, 31))  # Convert year column to date type
+head(Fatalities)
+by_state <- split(Fatalities, Fatalities$state)
+
+Fatalities_diff <- by_state[[1]][0,]  # Empty DF
+Fatalities_diff$state <- as.factor(NULL)
+
+for (state_data in by_state) {
+    zoo_state_data <- zoo(state_data[,-1:-2], order.by=state_data[,1])
+    diff_df <- as.data.frame(diff(zoo_state_data))
+    diff_df$state <- state_data$state[-1]
+    diff_df$year <- state_data$year[-1]
+    Fatalities_diff <- rbind(Fatalities_diff, diff_df)
+}
+
+Fatalities_diff <- Fatalities_diff[,c(5, 4, 1, 2, 3)]
+head(Fatalities_diff, 20)
+ggpairs(Fatalities_diff[c("spirits", "beertax", "afatalper10k")])
+
+# Model for all states
+summary(lm(afatalper10k~beertax+state, Fatalities_diff))
+
+# One model per state
+# for (state_name in levels(Fatalities$state)) {
+#     print(summary(lm(afatalper10k~beertax, subset(Fatalities_diff, state == state_name))))
+# }
+```

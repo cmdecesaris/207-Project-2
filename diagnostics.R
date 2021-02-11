@@ -1,6 +1,5 @@
-
 check.normality.assumptions = function(M){
-qqnorm(M$residuals)
+  #qqnorm(M$residuals)
   #qqline(M$residuals)
   the.SWtest = shapiro.test(M$residuals)
   pValue = the.SWtest$p.value
@@ -23,12 +22,19 @@ transformData = function(data){
   data$afatal_rate = log(data$afatal_rate)
   return(data)
 }
-transf.fatality.1982 = transformData(fatality.1982)
-View(transf.fatality.1982)
-transfd.model.1982 = lm(formula = afatal_rate ~ miles + dry + jail, data =transf.fatality.1982)
+new.transf.1982 = transformData(fatality.1982)
+new.transf.1983 = transformData(fatality.1983)
+new.transf.1984 = transformData(fatality.1984)
+new.transf.1985 = transformData(fatality.1985)
+new.transf.1986 = transformData(fatality.1986)
+new.transf.1987 = transformData(fatality.1987)
+new.transf.1988 = transformData(fatality.1988)
+
 
 #after running the above models again,
 shapiro.test(transfd.model.1982$residuals)
+shapiro.test(new.1983.model$residuals)
+
 
 library(ggplot2)
 library(lmtest)
@@ -46,7 +52,9 @@ check.variance = function(M, data){
   stuff = list("plot" = q, "pVal" = test)
   return(stuff)
 }
-check.variance(transfd.model.1982, transf.fatality.1982)
+check.variance(new.1983.model, new.1983.data)
+
+
 
 
 outliers = function(Model, data){
@@ -58,7 +66,9 @@ outliers = function(Model, data){
   outliers = which(abs(ri) > cutoff)
   return(outliers)
 }
+
 outliers(transfd.model.1982, transf.fatality.1982)
+outliers(new.1983.model, new.1983.data)
 
 
 # #check for interaction terms, look for the model that lowers BIC the most
@@ -73,6 +83,5 @@ outliers(transfd.model.1982, transf.fatality.1982)
 # model.3 = lm(afatal_rate ~ miles + dry + jail + dry*jail, data = fatality1982)
 # BIC(model.3)
 # BIC(model1982)
-
 
 

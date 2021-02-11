@@ -45,7 +45,7 @@ dim(Fatalities) #335 x 34
 afatal_fatal = Fatalities
 afatal_fatal$af_ratio= (afatal_fatal$afatal/afatal_fatal$fatal) #creates a ratio for each instance of alcohol related  fatalities/ total fatalities per 100k people
 
-afatal_fatal$ap_ratio= (afatal_fatal$afatal/afatal_fatal$pop)*100000 #per 100k people
+afatal_fatal$ap_ratio= (afatal_fatal$afatal/afatal_fatal$pop)*10000 #per 100k people
 afatal_fatal
 ```
 
@@ -71,7 +71,7 @@ af%>%filter(year=='1983'&jail=='yes')%>%summarize(mean(ap_ratio))
 af_year=af%>% group_by(year,jail,service,breath)%>%summarize(mean_af = mean(af_ratio), mean_ap=mean(ap_ratio))
 af_year_graph=af%>% group_by(year,jail)%>%summarize(mean_af = mean(af_ratio), mean_ap=mean(ap_ratio))
 
-af_year_graph
+af_state_graph
 
 af %>% group_by(state,jail,service, breath)%>% 
   count(state, jail) %>% rename(Total_Jail= n)
@@ -93,7 +93,7 @@ af_year
 
 ```
 
-```{r, Visualization of Set}
+```{r include=FALSE}
 
 datatable(af,class = 'cell-border stripe', 
  caption = htmltools::tags$caption(
@@ -140,7 +140,7 @@ ggplot(a, aes(factor(year), ap_ratio )) + geom_point(aes(shape = factor(jail),co
        col="Jail Sentence?",title="Mean Alcohol Fatalities/Pop by Year per 10k")+  theme(text = element_text(size=14,face = 'bold'),
         axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
 ```
-```{r}
+```{r include=FALSE}
 
 ggplot(af, aes(factor(state), ap_ratio )) + geom_point(aes(shape = factor(jail),color=factor(year)),size=3 )+labs(x="State", y="Mean Alcohol Fatalities/Fatalities",  
        col="Jail Sentence?",title="Mean Alcohol Fatalities/Fatalities by State")+theme(text = element_text(size=14,face = 'bold'),
@@ -166,7 +166,7 @@ ggplot(b, aes(factor(year), ap_ratio )) + geom_point(aes(shape = factor(jail),co
 
 
 
-```{r Basic Box plot showing the spread of afatal/carfatalities size, fig.width=15}
+```{r Basic Box plot showing the spread of afatal/carfatalities size, fig.width=15, include=FALSE}
 
 #This is a RATIO of Alcohol related vehical fatalites/ all vehical fatalities
 ggplot(afatal_fatal, aes(factor(state), afatal/fatal, fill=factor(state))) + geom_boxplot()+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+theme(text = element_text(size=14,face = 'bold'),
@@ -191,61 +191,158 @@ hist(af_year$mean_af)
 
 ## Models
 
-To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the united states. 
+To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States. 
 
-In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. 
+Southern: Louisiana, Mississippi, Alabama, Georgia, South Carolina,North Carolina, Arkansas, Texas, Florida, Tennessee, Oklahoma, Kentucky, West Virginia, and Virginia. 
+
+***INSERT MAP?***
+
+North Eastern: Maine, Vermont, New Hampshire, Massachusetts, New York, Rhode Island, New Jersey, Delaware Maryland, Pennsylvania. 
+In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty. 
+
+The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. In many ways, this is wishful thinking, as there are likely factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
+
+Because not every state changed their laws over the time period, a linear regression model with fixed time and state effects was selected. The fixed effect model seeks to account for variability with in each fixed year and fixed state. That is, we assume there are influential factors within each state and year not accounted for in the observed data. In the fixed model:
+
+$$Y_{it} = \beta_0 + \beta_1 X_1{it} +\cdots+\beta_1 X_{k,it} + \gamma_2 E_2 +\cdots + \gamma_i E_{i}+ \cdots + \gamma_n E_{n} + \delta_2 D_2 + \cdots +  \delta_t D_t + \cdots +\delta_T D_T + u_{it} .$$
+
+where $t=1,...,T$ represents the year (time) and $i=1,...,n$ represents the collection of instances for each state $i$ (entity). 
+
+$E_{i}$ represents the binary dummy variable which accounts for the fixed effect of state $i$
 
 
+$D_t$ represents the binary dummy variable which accounts for the fixed effect of year $t$
 
-```{r}
-south= af%>%filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ar","ok","ky","wv","va"))
+Notice how the dummy variables $ \gamma_1 E_1$ and $ \delta_1 D_1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $ \gamma_1 E_1$ is represented when $ \gamma_2 E_2= \cdots =\gamma_n E_n=0$
+
+$u_{it}$ represents the error terms. 
+ 
+ A simpler, project specific version of the model is:
+ 
+ $\hat{FatalityRate}_{region} = \beta_1 * Penalty + \beta_2 * BreathTest + StateEffects + TimeEffects$
+ 
+ In this form of the model the intercept $\beta_0$ is incorporated with in $StateEffects + TimeEffects$.
+
+
+The following table presents these states as well as two ratios. The first af_ratio represents the ratio between alcohol related vehicle fatalities and total vehicle fatalities for that state in that recorded year. The second, ap_ratio, represents the alcohol related fatality rate per 10K people.
+
+
+```{r include=FALSE}
+
+af$penalty <- with(af, factor(jail == "yes" | service == "yes",
+labels = c("no", "yes")))
+
+south= af%>%filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ok","ky","wv","va"))
 
 
 n_east= af%>%filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
 
+changed_j= af%>%filter(state %in% c("ct","nv","oh","or","sc","ut"))
+
+changed_b=af%>%filter(state %in% c("co","il","in","ia","ks","ky","la","nv","nh"))
+
+
+changed_s=af%>%filter(state %in% c("ct","nv","or","sc","ut"))
+
+
+changed_t =af%>%filter(state %in% c("ct","nv","or","sc","ut","oh","co","il","in","ia","ks","ky","la","nh"))
+
+
+
+
+changed_t82_88=changed_t%>%filter(year %in% c('1982','1988','1985'))
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+
+datatable(changed_t,class = 'cell-border stripe', 
+ caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table X: ', htmltools::em('XXXXX')), colnames= )
 ```
 
 
 
-```{r Using Ratios for Each Combo + Interactions}
+```{r}
+ggplot(south, aes(factor(state), ap_ratio )) + geom_point(aes(shape = factor(year),group=factor(year),color=factor(penalty)),size=3 )+labs(x="State", y="Mean Alcohol Fatalities/Pop by Jail Status",  
+       col="Penalty",shape="Year",title="Mean Alcohol Fatalities/Pop by Year per 10k")+  theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
+```
+```{r}
+ggplot(changed_t82_88, aes(factor(state), ap_ratio )) + geom_point(aes(shape = factor(year),color=factor(breath)),size=3 )+labs(x="State", y="Mean Alcohol Fatalities/Pop by Jail Status",  
+       col="Breath Test",shape="Year",title="Mean Alcohol Fatalities/Pop by Year per 10k")+  theme(text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+ geom_line()
+```
 
-anova.k = lm(log(ap_ratio)~factor(state)+factor(year)
-+factor(jail)+factor(breath)+factor(service)+miles
-,south)
-anova(anova.k)
-summary(anova.k)
-anova.k$coef
-plot(anova.k)
 
-anova.ki = lm((log(ap_ratio))~factor(state)+factor(year)+miles+
-factor(jail)*factor(service)*factor(breath),south)
-summary(anova.ki)
-anova(anova.ki)
-anova.ki$coef
-plot(anova.ki)
+```{r}
+changed_t82=changed_t%>%filter(year %in% c('1982'))
+changed_t85=changed_t%>%filter(year %in% c('1985'))
+changed_t88=changed_t%>%filter(year %in% c('1988'))
+changed_t82_88
+```
 
-anova.k = lm(log(ap_ratio)~factor(state)+(year)
-+factor(jail)+factor(breath)+factor(service)
-+miles
-,n_east)
-anova(anova.k)
-summary(anova.k)
-anova.k$coef
-plot(anova.k)
+```{r}
+library(plm)
 
-anova.ki = lm((log(ap_ratio))~factor(state)+factor(year)+factor(jail)*factor(service)*factor(breath),n_east)
-summary(anova.ki)
-anova.ki$coef
-anova(anova.ki)
-plot(anova.ki)
+pan.total <- plm(ap_ratio ~ penalty +breath+ state + year,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = af)
+
+summary(pan.total)
+coeftest(pan.total, vcov = vcovHC, type = "HC1")
+
+```
+
+```{r}
+
+pan.south <- plm((ap_ratio) ~penalty+breath+ state + year,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = south)
+
+summary(pan.south)
+coeftest(pan.south, vcov = vcovHC, type = "HC1")
+```
+```{r}
+
+
+pan.north <- plm(log(ap_ratio) ~penalty+breath+ state + year+miles,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = n_east)
+
+summary(pan.north)
+
+
+coeftest(pan.north, vcov = vcovHC, type = "HC1")
+
 ```
 
 
 
 
-```{r Interactions Significant?}
 
+
+
+```{r}
+anova.jail = lm(log(af_ratio)~factor(state)+(year)+factor(jail)*factor(breath)*factor(service),changed_t)
+
+summary(anova.jail)
+anova(anova.jail)
+anova.jail$coef
+plot(anova.jail)
 ```
+
+
+
+
 
 
 

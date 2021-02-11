@@ -31,7 +31,7 @@ night_youth<- Fatalities$fatal1517
 night_YA <- Fatalities$fatal1820
 night_legal <- Fatalities$fatal2124
 
-a_rate <-  Fatalities$afatal/Fatalities$pop
+a_rate <-  (Fatalities$afatal/Fatalities$pop)*10000
 Fatalities <- cbind(Fatalities,a_rate)
 
 hist(drinking_age)
@@ -65,6 +65,21 @@ Fatalities[211,]
 Fatalities[which(Fatalities$state == "la"),]
 
 
+south= Fatalities%>%filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ar","ok","ky","wv","va"))
+n_east= Fatalities%>%filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
+
+
+anova_fat_state_south <- aov(afatal~as.factor(drinkage)*as.factor(state), data = south)
+summary(anova_fat_state_south)
+
+
+
+anova_fat_state_north <- aov(afatal~as.factor(drinkage)*as.factor(state), data = n_east)
+summary(anova_fat_state_north)
+
+anova_fat_state_n_nointeract <- aov(afatal~as.factor(drinkage)+as.factor(state), data = n_east)
+summary(anova_fat_state_n_nointeract)
+
 ```
 
 
@@ -74,6 +89,23 @@ library("gtrendsR")
 library("tidyverse")
 library("usmap")
 ```
+
+```{r}
+#specify the packages of interest
+packages = c("gtrendsR","tidyverse","usmap")
+
+#use this function to check if each package is on the local machine
+#if a package is installed, it will be loaded
+#if any are not, the missing package(s) will be installed and loaded
+package.check <- lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+        install.packages(x, dependencies = TRUE)
+        library(x, character.only = TRUE)
+    }
+})
+
+```
+
 
 ```{r}
 
@@ -86,10 +118,10 @@ year = 1982
 
 plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
   scale_fill_continuous( low = "white", high = "red", 
-                         name = "alcohol-related traffic accidents per capita", label = scales::comma, limits = c(0.000025,0.00020)) +
+                         name = "alcohol-related traffic accidents per 10,000 people", label = scales::comma, limits = c(0.1, 1.9)) +
   theme(legend.position = "right") + 
   theme(panel.background = element_rect(colour = "black")) + 
-  labs(title = year, caption = "Source: @littlemissdata blog")
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 
 year = 1983
   data <- Fatalities[which(Fatalities$year == year),]
@@ -97,50 +129,50 @@ year = 1983
 
 plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
   scale_fill_continuous( low = "white", high = "red", 
-                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+                         name = "alcohol-related traffic accidents per 10,000 people", label = scales::comma, limits = c(0.1, 1.9)) +
   theme(legend.position = "right") + 
   theme(panel.background = element_rect(colour = "black")) + 
-  labs(title = year, caption = "Source: @littlemissdata blog")
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 
 year = 1984
   data <- Fatalities[which(Fatalities$year == year),]
 
 plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
   scale_fill_continuous( low = "white", high = "red", 
-                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+                         name = "alcohol-related traffic accidents per 10,000 people", label = scales::comma, limits = c(0.1, 1.9)) +
   theme(legend.position = "right") + 
   theme(panel.background = element_rect(colour = "black")) + 
-  labs(title = year, caption = "Source: @littlemissdata blog")
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 year = 1985
 
   data <- Fatalities[which(Fatalities$year == year),]
 
 plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
   scale_fill_continuous( low = "white", high = "red", 
-                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+                         name = "alcohol-related traffic accidents per 10,000 people", label = scales::comma, limits = c(0.1, 1.9)) +
   theme(legend.position = "right") + 
   theme(panel.background = element_rect(colour = "black")) + 
-  labs(title = year, caption = "Source: @littlemissdata blog")
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 year = 1986
 
   data <- Fatalities[which(Fatalities$year == year),]
 
 plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
   scale_fill_continuous( low = "white", high = "red", 
-                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+                         name = "alcohol-related traffic accidents per 10,000 people", label = scales::comma, limits = c(0.1, 1.9)) +
   theme(legend.position = "right") + 
   theme(panel.background = element_rect(colour = "black")) + 
-  labs(title = year, caption = "Source: @littlemissdata blog")
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 year = 1987
 
   data <- Fatalities[which(Fatalities$year == year),]
 
 plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
   scale_fill_continuous( low = "white", high = "red", 
-                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+                         name = "alcohol-related traffic accidents per 10,000 people", label = scales::comma, limits = c(0.1, 1.9)) +
   theme(legend.position = "right") + 
   theme(panel.background = element_rect(colour = "black")) + 
-  labs(title = year, caption = "Source: @littlemissdata blog")
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 
 year = 1988
 
@@ -148,15 +180,178 @@ year = 1988
 
 plot_usmap(data = data, values = "a_rate",  color = "black", labels=FALSE) + 
   scale_fill_continuous( low = "white", high = "red", 
-                         name = "alcohol-related traffic accidents per capita", label = scales::comma,limits = c(0.000025,0.00020)) +
+                         name = "alcohol-related traffic accidents per 10,000 people", label = scales::comma, limits = c(0.1, 1.9)) +
   theme(legend.position = "right") + 
   theme(panel.background = element_rect(colour = "black")) + 
-  labs(title = year, caption = "Source: @littlemissdata blog")
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 
 ```
 
+```{r}
+
+#For the south
+year = 1982
+
+south_data <- south[which(south$year == year),]
+
+plot_usmap(data = south_data, values = "a_rate",  color = "black", include = c(.west_south_central,.east_south_central,.south_atlantic),exclude = c("MD","DE"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, south", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1983
+
+south_data <- south[which(south$year == year),]
+
+plot_usmap(data = south_data, values = "a_rate",  color = "black", include = c(.west_south_central,.east_south_central,.south_atlantic), exclude = c("MD","DE"),  labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, south", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1984
+
+south_data <- south[which(south$year == year),]
+
+plot_usmap(data = south_data, values = "a_rate",  color = "black", include = c(.west_south_central,.east_south_central,.south_atlantic), exclude = c("MD","DE"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, south", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1985
+
+south_data <- south[which(south$year == year),]
+
+plot_usmap(data = south_data, values = "a_rate",  color = "black", include = c(.west_south_central,.east_south_central,.south_atlantic),exclude = c("MD","DE"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, south", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
 
 
+year = 1986
+
+south_data <- south[which(south$year == year),]
+
+plot_usmap(data = south_data, values = "a_rate",  color = "black", include = c(.west_south_central,.east_south_central,.south_atlantic), exclude = c("MD","DE"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, south", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1987
+
+south_data <- south[which(south$year == year),]
+
+plot_usmap(data = south_data, values = "a_rate",  color = "black", include = c(.west_south_central,.east_south_central,.south_atlantic), exclude = c("MD","DE"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, south", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1988
+
+south_data <- south[which(south$year == year),]
+
+plot_usmap(data = south_data, values = "a_rate",  color = "black", include = c(.west_south_central,.east_south_central,.south_atlantic), exclude = c("MD","DE"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, south", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+```
+
+```{r}
+
+#for the northeast
+
+year = 1982
+
+northeast_data <- n_east[which(n_east$year == year),]
+
+plot_usmap(data = northeast_data, values = "a_rate",  color = "black", include = c(.new_england,.mid_atlantic,"MD"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, northeast", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1983
+
+northeast_data <- n_east[which(n_east$year == year),]
+
+plot_usmap(data = northeast_data, values = "a_rate",  color = "black", include = c(.new_england,.mid_atlantic,"MD"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, northeast", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1984
+
+northeast_data <- n_east[which(n_east$year == year),]
+
+plot_usmap(data = northeast_data, values = "a_rate",  color = "black", include = c(.new_england,.mid_atlantic,"MD"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, northeast", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1985
+
+northeast_data <- n_east[which(n_east$year == year),]
+
+plot_usmap(data = northeast_data, values = "a_rate",  color = "black", include = c(.new_england,.mid_atlantic,"MD"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, northeast", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+
+year = 1986
+
+northeast_data <- n_east[which(n_east$year == year),]
+
+plot_usmap(data = northeast_data, values = "a_rate",  color = "black", include = c(.new_england,.mid_atlantic,"MD"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, northeast", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1987
+
+northeast_data <- n_east[which(n_east$year == year),]
+
+plot_usmap(data = northeast_data, values = "a_rate",  color = "black", include = c(.new_england,.mid_atlantic,"MD"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, northeast", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+year = 1988
+
+northeast_data <- n_east[which(n_east$year == year),]
+
+plot_usmap(data = northeast_data, values = "a_rate",  color = "black", include = c(.new_england,.mid_atlantic,"MD"), labels=FALSE) + 
+  scale_fill_continuous( low = "white", high = "red", 
+                         name = "alcohol-related traffic accidents per 10,000 people, northeast", label = scales::comma, limits = c(0.1, 1.9)) +
+  theme(legend.position = "right") + 
+  theme(panel.background = element_rect(colour = "black")) + 
+  labs(title = year, caption = "Inspiration: @littlemissdata blog")
+
+```
 
 
 

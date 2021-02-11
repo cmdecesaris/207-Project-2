@@ -1,0 +1,207 @@
+---
+title: "v2Report"
+author: "Ana Boeriu"
+date: "2/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r, echo = FALSE, message=FALSE, results = 'hide'}
+library(ggplot2)
+library(viridis)
+library(AER)
+library(MASS)
+data(Fatalities)
+head(Fatalities)
+str(Fatalities)
+dim(Fatalities)
+
+Fatalities$afatal_rate <- Fatalities$afatal / Fatalities$pop * 10000
+## different us regions
+south = c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ar","ok","ky","wv","va")
+n_east =  c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa")
+
+Fatalities$location[Fatalities$state %in% south]  =  "south"
+Fatalities$location[Fatalities$state %in% n_east] =  "north east"
+Fatalities$location[!(Fatalities$state %in% n_east | Fatalities$state %in% south)]   =  "other"
+str(Fatalities$location)
+Fatalities$location = as.factor(Fatalities$location)
+
+Fatalities = Fatalities[c("afatal_rate","year", "spirits", "unemp", "income", "emppop", "beertax",    "baptist", "mormon","drinkage","dry","youngdrivers","miles","breath","jail", "service", "milestot", "unempus", "emppopus","gsp", "location")]
+
+
+#remove the missing value:
+Fatalities = Fatalities[-c(which(is.na(Fatalities$jail))),]
+
+fatality.1982 = subset(Fatalities, year == "1982")
+fatality.1982$year = NULL
+
+fatality.1985 = subset(Fatalities, year == "1985")
+fatality.1985$year = NULL
+
+fatality.1988 = subset(Fatalities, year == "1988")
+fatality.1988$year = NULL
+```
+
+## I. Model Selection\
+In this section we are using stepwise regression for all subsets and a specific subset selection process to see which combination of explanatory variables will produce the best model based off of the criteria we have chosen to use which is BIC. There are many variables in our model and we must make sure the ones in our model are significant. We looked at the model chosen when using all subsets and then Forwards Backwards Selection.
+
+#### A. Model Criteria\
+Because our goal is to have a correct model, we are choosing only explanatory variables    which have a significant relationship with angina. This model may be smaller than ones which have the goal of prediction. For the purposes of this class AIC or BIC are often used as model selection criteria as they penalize large models. AIC may overfit correct models and BIC penalizes large models even more, so we chose to focus on BIC as we imagine if somebody is trying to see if a person has angina  they will really need the  result to be as correct as possible. We choose the model that lowers BIC the most.
+
+#### A. Subset Selection\
+Subset selection does not evaluate all possible models; however, it is faster and does not cost as much because not all subsets are calculated. We chose to use Forwards Backwards Selection because we want a correct model which means having a smaller one. Of course, underfitting a model is not ideal however between underfitting and overfitting, underfitting the model is more likely to achieve the smaller and often more correct model which Forwards Selection or Forwards Backwards Selection is more likely to do. Forwards Backwards Selection does not underfit as much as Forwards Selection though, so we used Forwards Backwards as our subset selection. These were the models with the lowest BIC when looking at all possible models.
+```{r, results = "hide",include=FALSE}
+#used get best model fun from model_selection.R file
+best.model.1982 = lm(formula = afatal_rate ~ location + miles + dry + jail + spirits, 
+    data = fatality.1982)
+best.model.1985 = lm(formula = afatal_rate ~ location + income + miles + jail, 
+    data = fatality.1985)
+best.model.1988 = lm(formula = afatal_rate ~ location + income + baptist, data = fatality.1988)
+```
+
+Model 1 : $$ Y_{1982} =  -0.7118 + 0.1313X_{region, other} + 0.1711X_{region, south} + 0.0002X_{miles} +0.0113X_{dry} + 0.2154X_{jail,yes} +  0.0888X_{spirits}$$
+
+Model 2: $$ Y_{1985} =  0.56308 - 0.0094X_{region, other} + 0.0781X_{region, south} - 0.00004X_{income} + 0.00008X_{miles} + 0.13960X_{jail,yes}$$
+
+Model 3: $$ Y_{1988} =  1.35883 - 0.01927X_{region, other} - 0.15759X_{region, south} - 0.00005X_{income} + 0.01255 X_{baptist}$$
+
+
+### I. Diagnostics
+With our “best” models of no interaction effects, we will perform diagnostics to ensure that it meets the assumptions of multiple regression, which are that observations are independent, errors have constant variance and they are normally distributed. We will look at different tests for these assumptions, and find and remove outliers. If necessary. we will transform data to correct for non-normality, non-linearity, or non-constant variance  
+
+### A. Testing for Normality
+###   1. QQ Plot
+```{r, results = 'hide',include=FALSE}
+plot_qq = function(M, y){
+qqnorm(M$residuals, main = sprintf("QQPlot Year %s", y))
+qqline(M$residuals)
+}
+par(mfrow = c(2,2))
+plot_qq(best.model.1982, "Model 1")
+plot_qq(best.model.1985, "Model 2")
+plot_qq(best.model.1988, "Model 3")
+```
+
+This data does not seem to be normally distributed as there are heavy tails on all three models. There are outliers and the points towards the end of the line are not where the points would lie if the data was totally normally distributed. 
+
+### 2. Shapiro Wilks Test
+```{r, results="hide",include=FALSE}
+check.normality.assumptions = function(M){
+  #qqnorm(M$residuals)
+  #qqline(M$residuals)
+  the.SWtest = shapiro.test(M$residuals)
+  pValue = the.SWtest$p.value
+  if (pValue < (0.01|0.05|0.1)){
+    bc = boxcox(M,plotit = FALSE)
+    lambda = bc$x[which.max(bc$y)]
+    lambda #To see the value of lambda, transform to ln(y)
+ 
+  results = list("p-value" = pValue, "lambda" = lambda)
+  return(results)
+  }
+}
+check.normality.assumptions(best.model.1982)
+check.normality.assumptions(best.model.1985)
+check.normality.assumptions(best.model.1988)
+```
+
+$H_{o}: errors\ is\ normal$   $H_{A}:$ erros is non- normal
+  
+   $P-Value_{model\ 1}:  0.2426$     $P-Value_{model\ 2}:  0.02156$     $P-Value_{model\ 3}:  0.0024$
+  
+The p-values for model 1 and 2 are greater than an alpha of 0.01. Thus we fail to reject the null and conclude that the errors are normally distributed. However, for model 3 the p-value is less than any significant alpha of 0.01, 0.1 and 0.05 thus we reject the null and conclude that the errors are not normally distributed.
+
+### C. Testing for constant variance (add indent below)
+### 1. Errors vs Fitted Values
+```{r, results = "hide",include=FALSE}
+plot_err_vs_fit = function(M,y){
+plot(M$fitted.values, M$residuals, main = sprintf("Errors vs.Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors") 
+abline(h = 0,col = "purple")
+}
+par(mfrow = c(2,2))
+plot_err_vs_fit(best.model.1982, "Model 1")
+plot_err_vs_fit(best.model.1985, "Model 2")
+plot_err_vs_fit(best.model.1988, "Model 3")
+```
+
+There are many more data points on the lower values of X and a couple of outliers, but the data points are somewhat in a “band” around 0.
+
+
+### 2. BP test
+```{r,results = 'hide',include=FALSE}
+bptest(best.model.1982)
+bptest(best.model.1985)
+bptest(best.model.1988)
+```
+$H_{o}:$ Residuals have equal variance   $H_{A}:$ Residuals do not have equal variance
+ 
+   $P-Value_{model\ 1}$: 0.6729    $P-Value_{model\ 2}$: 0.1003      $P-Value_{model\ 2}$: 0.03305
+
+All the models have a p-value greater than an alpha of 0.01 thus we fail to reeject the null and conclude that all the models have constant variance. 
+
+### D. Transformations for Model 3
+In this section we wll transform the data of Model 3 to try to correct for non-normality in the errors using the Box-Cox transformation. Box-Cox transformations uses $(Y^\lambda−1)/\lambda$ to find the lambda that maximizes log-likelihood. We found that the lambda that maximizes the log- likelihood has a value o zero which corresponds to a log transformation. Once we transform the data, we will re-fit model 3.  We chose to use the transformed data for Model 3  because that one made the data most linear, most normal, and has the most constant variance compared to no transformation. Our next step was to look for and remove any outliers so that we could further meet the assumptions of linear regression. We did find 2 outliers in model 2 and two outliers in Model 3, when using an alpha of 0.05. We also checked for leverage points, which are data points which have a large influence on the regression line. When using cook’s distance  there were no leverage points, and so in the end we concluded to not remove any data points because the outliers are not influencing the models. 
+
+```{r, results="hide",include=FALSE}
+transformData = function(data){
+  data$afatal_rate = log(data$afatal_rate)
+  return(data)
+}
+new.fatality.1988 = transformData(fatality.1988)
+head(new.fatality.1988)
+
+```
+```{r,results="hide"}
+new.best.model.1988 = lm(formula = afatal_rate ~ location + income + miles, data = new.fatality.1988)
+shapiro.test(new.best.model.1988$residuals)
+bptest(new.best.model.1988)
+
+outliers = function(Model, data){
+  ri = rstandard(Model)
+  alpha = 0.1
+  n = nrow(data) 
+  p = length(Model$coefficients)
+  cutoff = qt(1-alpha/(2*n), n - p )
+  outliers = which(abs(ri) > cutoff)
+  return(outliers)
+}
+
+outliers(new.best.model.1988, new.fatality.1988)
+outliers(best.model.1982,fatality.1982)
+outliers(best.model.1985,fatality.1985)
+
+all.values = influence.measures(new.best.model.1988)$infmat
+colnames(all.values)
+p = new.best.model.1988$coefficients
+n = nrow(new.best.model.1988)
+lev.DF = which(all.values[,"cook.d"] >qf(0.50,p,n-p))
+
+all.values = influence.measures(best.model.1985)$infmat
+lev.DF = which(all.values[,"cook.d"] >qf(0.50,p,n-p))
+lev.DF
+```
+### E. Final Models
+After verifying the assumptions and performing transformations, we can conclude that the assumptions of normality and constant variance are met for all models and no outliers need to be removed. Thus the best models are:
+
+
+$$ Y_{1982} =  -0.7118 + 0.1313X_{region, other} + 0.1711X_{region, south} + 0.0002X_{miles} +0.0113X_{dry} + 0.2154X_{jail,yes} +  0.0888X_{spirits}$$
+
+$$ Y_{1985} =  0.56308 - 0.0094X_{region, other} + 0.0781X_{region, south} - 0.00004X_{income} + 0.00008X_{miles} + 0.13960X_{jail,yes}$$
+
+$$ ln(Y_{1988}) = -0.3367+ 0.0190X_{region, other} 0.1032X_{region, south} - 0.0001X_{income} + 0.0001 X_{miles}$$
+
+
+
+
+
+### R Appendix
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
+
+```
+
+  
+
+

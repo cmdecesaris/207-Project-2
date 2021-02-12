@@ -108,7 +108,7 @@ af=as.data.frame(Fatalities)#Christina's data
 ```
 
 ```{r, echo = FALSE}
-hist(drinking_age)
+hist(drinking_age, main = "Histogram of Legal Dinking Age", xlab = "Legal Drinking Age")
 ```
 ### add titles and axes lables to graphs?
 
@@ -177,7 +177,7 @@ datatable(stat,class = 'cell-border stripe',
     'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Southern Region')),options = list(sDom  = 't'), colnames= , rownames=)
 
 anova_fat_state_north <- aov(afatal~as.factor(drinkage)*as.factor(state), data = n_east)
-summary(anova_fat_state_north)
+#summary(anova_fat_state_north)
 
 Variable <- c("Drinking Age", "State","Interaction DrinkingAge:State")
 FValue <- c(87.200,220.933,0.848)
@@ -191,7 +191,7 @@ datatable(stat,class = 'cell-border stripe',
     'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Northern Region')), colnames= )
 
 anova_fat_state_n_nointeract <- aov(afatal~as.factor(drinkage)+as.factor(state), data = n_east)
-summary(anova_fat_state_n_nointeract)
+#summary(anova_fat_state_n_nointeract)
 
 ```
 

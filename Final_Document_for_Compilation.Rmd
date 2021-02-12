@@ -5,7 +5,7 @@ date: "02/09/2021"
 output:
   html_document:
     df_print: paged
-    number_sections: yes
+    #number_sections: yes
 ---
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.pos = 'H')
@@ -49,9 +49,8 @@ Based on the literature, drinking age seems to be a state's first-line of defens
 
 **Insert table with the, like, 6 ANOVA results.
 
-# Inferential analysis 
+## Inferential analysis 
 
-##depiction of the models we use in statistical terms
 
 ### Model Fit
 ```{r, echo = FALSE, message=FALSE, results = 'hide'}
@@ -84,14 +83,14 @@ fatality.1985$year = NULL
 fatality.1988 = subset(Fatalities, year == "1988")
 fatality.1988$year = NULL
 ```
-####  Model Selection\
+###  Model Selection\
 In this section we are using stepwise regression for all subsets and a specific subset selection process to see which combination of explanatory variables will produce the best model based off of the criteria we have chosen to use which is BIC. There are many variables in our model and we must make sure the ones in our model are significant. We looked at the model chosen when using all subsets and then Forwards Backwards Selection.
 
-####  Model Criteria\
+###  Model Criteria\
 Because our goal is to have a correct model, we are choosing only explanatory variables    which have a significant relationship with angina. This model may be smaller than ones which have the goal of prediction. For the purposes of this class AIC or BIC are often used as model selection criteria as they penalize large models. AIC may overfit correct models and BIC penalizes large models even more, so we chose to focus on BIC as we imagine if somebody is trying to see if a person has angina  they will really need the  result to be as correct as possible. We choose the model that lowers BIC the most.
 
-#### Subset Selection\
-Subset selection does not evaluate all possible models; however, it is faster and does not cost as much because not all subsets are calculated. We chose to use Forwards Backwards Selection because we want a correct model which means having a smaller one. Of course, underfitting a model is not ideal however between underfitting and overfitting, underfitting the model is more likely to achieve the smaller and often more correct model which Forwards Selection or Forwards Backwards Selection is more likely to do. Forwards Backwards Selection does not underfit as much as Forwards Selection though, so we used Forwards Backwards as our subset selection. These were the models with the lowest BIC when looking at all possible models.
+### Subset Selection\
+Subset selection does not evaluate all possible models; however, it is faster and does not cost as much because not all subsets are calculated. We chose to use Forwards Backwards Selection because we want a correct model which means having a smaller one. Of course, underfitting a model is not ideal however between underfitting and overfitting, underfitting the model is more likely to achieve the smaller and often more correct model which Forwards Selection or Forwards Backwards Selection is more likely to do. Forwards Backwards Selection does not underfit as much as Forwards Selection though, so we used Forwards Backwards as our subset selection. These were the models with the lowest BIC when looking at all possible models. 
 ```{r, results = "hide",include=FALSE}
 #used get best model fun from model_selection.R file
 best.model.1982 = lm(formula = afatal_rate ~ location + miles + dry + jail + spirits, 
@@ -111,8 +110,8 @@ Model 3: $$ Y_{1988} =  1.35883 - 0.01927X_{region, other} - 0.15759X_{region, s
 ### Diagnostics
 With our “best” models of no interaction effects, we will perform diagnostics to ensure that it meets the assumptions of multiple regression, which are that observations are independent, errors have constant variance and they are normally distributed. We will look at different tests for these assumptions, and find and remove outliers. If necessary. we will transform data to correct for non-normality, non-linearity, or non-constant variance  
 
-#### Testing for Normality
-#####  QQ Plot
+### Testing for Normality
+####  QQ Plot
 ```{r, echo = FALSE}
 plot_qq = function(M, y){
 qqnorm(M$residuals, main = sprintf("QQPlot %s", y))
@@ -155,7 +154,7 @@ $H_{o}:$ errors is  normal   $H_{A}:$ errors is non- normal
   
 The p-values for model 1 and 2 are greater than an alpha of 0.01. Thus we fail to reject the null and conclude that the errors are normally distributed. However, for model 3 the p-value is less than any significant alpha of 0.01, 0.1 and 0.05 thus we reject the null and conclude that the errors are not normally distributed.
 
-#### Testing for constant variance
+### Testing for constant variance
 ####  Errors vs Fitted Values
 ```{r, echo = FALSE}
 plot_err_vs_fit = function(M,y){
@@ -184,7 +183,7 @@ $H_{o}:$ Residuals have equal variance   $H_{A}:$ Residuals do not have equal va
 
 All the models have a p-value greater than an alpha of 0.01 thus we fail to reeject the null and conclude that all the models have constant variance. 
 
-#### Transformations for Model 3
+### Transformations for Model 3
 In this section we wll transform the data of Model 3 to try to correct for non-normality in the errors using the Box-Cox transformation. Box-Cox transformations uses $(Y^\lambda−1)/\lambda$ to find the lambda that maximizes log-likelihood. We found that the lambda that maximizes the log- likelihood has a value o zero which corresponds to a log transformation. Once we transform the data, we will re-fit model 3.  We chose to use the transformed data for Model 3  because that one made the data most linear, most normal, and has the most constant variance compared to no transformation. Our next step was to look for and remove any outliers so that we could further meet the assumptions of linear regression. We did find 2 outliers in model 2 and two outliers in Model 3, when using an alpha of 0.05. We also checked for leverage points, which are data points which have a large influence on the regression line. When using cook’s distance  there were no leverage points, and so in the end we concluded to not remove any data points because the outliers are not influencing the models. 
 
 ```{r,  echo=FALSE}
@@ -224,7 +223,7 @@ lev.DF = which(all.values[,"cook.d"] >qf(0.50,p,n-p))
 lev.DF
 ```
 
-#### Final Models
+### Final Models
 After verifying the assumptions and performing transformations, we can conclude that the assumptions of normality and constant variance are met for all models and no outliers need to be removed. Thus the best models are:
 
 $$ Y_{1982} =  -0.7118 + 0.1313X_{region, other} + 0.1711X_{region, south} + 0.0002X_{miles} +0.0113X_{dry} + 0.2154X_{jail,yes} +  0.0888X_{spirits}$$
@@ -284,6 +283,10 @@ More thoughts on non-jail ways that drunk driving can be curbed and fatalities l
 [Relationship between gasoline prices and drunk driving crashes](https://www.sciencedirect.com/science/article/pii/S0001457510002423?casa_token=jpNEjTLZTRAAAAAA:jfG4LsqTxl3xxVb8DihHfrBd0wrACz9922VQxe4OR1QczbXWLlyn11I0F7YWM0w1rgPdvdz_) This could be interesting for discussion. It also contains some statistics about unemployment, which is why it was included.
 
 [A historical review on drunk driving in the US](https://www.tandfonline.com/doi/full/10.1080/15389588.2012.656858?casa_token=nukMm9C_XSIAAAAA%3AbrRhZXddGjRjHEJXhjC6vXDTvdS1-THbcz1Af-geGmpLhRFflTGzo1dzQEX4CIj5OCWZywjsnTg) What has worked, and what hasn't? This will be an important contribution to the discussion section, as we can compare our results (Whatever they may be) to this comprehensive review.
+
+# GitHub Repository\ 
+(https://github.com/cmdecesaris/207-Project-2/blob/main/Final_Document_for_Compilation.Rmd)
+
 
 # Session info {-}
 

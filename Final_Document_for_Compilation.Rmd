@@ -39,7 +39,7 @@ In the 1980s, faced with the stark statistics, lawmakers implemented various law
 - Which combination of drunk-driving related variables in the data set best predict the rate of alcohol-related traffic fatalities?
 - Is it possible to imply causality between these changes and the decrease or increase of alcohol-related traffic fatalities?
 
-Based on previous literature, we hypothesize that alcohol-related traffic fatality will not be significantly correlated to a drinking age, beer tax, or a more-stringent sentancing for drunk driving offenses. (Mast et al, Perrine, Peck, Fell) Better understanding the answers to these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
+We hypothesize that alcohol-related traffic fatality will not be significantly correlated to a drinking age, beer tax, or a more-stringent sentancing for drunk driving offenses (Mast et al, Perrine, Peck, Fell). Better understanding the answers to these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
 
 # Background
 
@@ -58,7 +58,7 @@ Preliminary analysis suggests that law-changes were similar between the southeas
 
 
 ## Drinking Age
-Based on the literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities. Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
+Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities (Lovenheim, Slemrod). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
 
 The notation for the test performed (two-way ANOVA) to determine significance of drinking age and state is as follows:
 

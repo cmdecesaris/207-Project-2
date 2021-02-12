@@ -246,7 +246,7 @@ best.model.1985 = lm(formula = afatal_rate ~ location + income + miles + jail,
     data = fatality.1985)
 best.model.1988 = lm(formula = afatal_rate ~ location + income + baptist, data = fatality.1988)
 ```
-
+<div align="center">
 Model 1 : $$ Y_{1982} =  -0.7118 + 0.1313X_{region, other} + 0.1711X_{region, south} + 0.0002X_{miles} +0.0113X_{dry} + 0.2154X_{jail,yes} +  0.0888X_{spirits}$$
 
 Model 2: $$ Y_{1985} =  0.56308 - 0.0094X_{region, other} + 0.0781X_{region, south} - 0.00004X_{income} + 0.00008X_{miles} + 0.13960X_{jail,yes}$$
@@ -258,7 +258,6 @@ Model 3: $$ Y_{1988} =  1.35883 - 0.01927X_{region, other} - 0.15759X_{region, s
 With our “best” models of no interaction effects, we will perform diagnostics to ensure that it meets the assumptions of multiple regression, which are that observations are independent, errors have constant variance and they are normally distributed. We will look at different tests for these assumptions, and find and remove outliers. If necessary. we will transform data to correct for non-normality, non-linearity, or non-constant variance
 
 ### Testing for Normality
-####  QQ Plot
 ```{r, echo = FALSE}
 plot_qq = function(M, y){
 qqnorm(M$residuals, main = sprintf("QQPlot %s", y))
@@ -269,7 +268,6 @@ plot_qq(best.model.1982, "Model 1")
 plot_qq(best.model.1985, "Model 2")
 plot_qq(best.model.1988, "Model 3")
 ```
-
 
 This data does not seem to be normally distributed as there are heavy tails on all three models. There are outliers and the points towards the end of the line are not where the points would lie if the data was totally normally distributed.
 
@@ -315,7 +313,6 @@ plot_err_vs_fit(best.model.1988, "Model 3")
 ```
 
 There are many more data points on the lower values of X and a couple of outliers, but the data points are somewhat in a “band” around 0.
-
 
 #### Breusch-Pagan Test
 ```{r,results = 'hide',include=FALSE}

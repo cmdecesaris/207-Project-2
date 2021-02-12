@@ -359,6 +359,7 @@ lev.DF
 ### Final Models
 After verifying the assumptions and performing transformations, we can conclude that the assumptions of normality and constant variance are met for all models and no outliers need to be removed. Thus the best models are:
 
+<div align="center">
 **Model 1:** $$ Y_{1982} =  -0.7118 + 0.1313X_{region, other} + 0.1711X_{region, south} + 0.0002X_{miles} +0.0113X_{dry} + 0.2154X_{jail,yes} +  0.0888X_{spirits}$$
 
 

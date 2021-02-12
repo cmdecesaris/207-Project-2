@@ -37,6 +37,8 @@ Alcohol-related traffic fatalities account for over a quarter of traffic-related
   - *Drinking age study (Mary) *
 
   - *Most influential effects study (Ana) *
+We found these predictor variables to be the most important for the years 1982, 1985, 1988:
+region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits.   
 
 The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
 

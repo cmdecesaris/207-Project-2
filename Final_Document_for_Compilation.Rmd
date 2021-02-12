@@ -389,8 +389,9 @@ For the fixed effects model, the following assumptions are made:
  In this form of the model the intercept $\beta_0$ is incorporated with in $StateEffects + TimeEffects$.
 
 ```{r}
-a_rate <-  (af$afatal/af$pop)*10000
-af <- cbind(af,a_rate)
+ data(Fatalities)
+af=data.frame(Fatalities)
+af$rate=(af$afatal/af$pop)*10000
 
 af$penalty <- with(af, factor(jail == "yes" | service == "yes",
 labels = c("no", "yes")))

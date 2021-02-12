@@ -189,7 +189,7 @@ stat <- data.frame(Variable, FValue, PValue)
 datatable(stat,class = 'cell-border stripe',
  caption = htmltools::tags$caption(
     style = 'caption-side: top; text-align: center;',
-    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Northern Region')), colnames= )
+    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Northern Region')),options = list(sDom  = 't'), colnames= )
 
 anova_fat_state_n_nointeract <- aov(afatal~as.factor(drinkage)+as.factor(state), data = n_east)
 #summary(anova_fat_state_n_nointeract)

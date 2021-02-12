@@ -431,7 +431,7 @@ coeftest(pan.south, vcov = vcovHC, type = "HC1")
 ```{r}
 
 pan.north <- plm(log(rate
-) ~ state + year+beertax,
+) ~ penalty+breath+state + year,
 index = c("state", "year"),
 model = "within",
 effect = "twoways",

@@ -118,7 +118,7 @@ library(dplyr)
 #plot(drinking_age,night_youth)
 #plot(drinking_age,night_YA)
 #plot(drinking_age,night_legal)
-par(mfrow=c(2,2))
+#par(mfrow=c(2,2))
 
 #alc_age <- lm(a_rate~as.factor(drinking_age))
 #plot(alc_age)
@@ -150,11 +150,13 @@ datatable(stat,class = 'cell-border stripe',
 
 
 
-plot(anova_fat_state)
-mtext("Diagnostics for Drinking Age", outer = TRUE, cex = 2)
+par(mfrow=c(2,2), oma=c(0,0,5,0))
+plot(anova_fat_state,sub = NA)
+mtext("Diagnostics for Drinking Age", side = 3, outer = TRUE, cex = 1)
+
 Fatalities[112,]
-Fatalities[211,]
-Fatalities[which(Fatalities$state == "la"),]
+#Fatalities[211,]
+#Fatalities[which(Fatalities$state == "la"),]
 
 
 south= Fatalities%>%filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ar","ok","ky","wv","va"))

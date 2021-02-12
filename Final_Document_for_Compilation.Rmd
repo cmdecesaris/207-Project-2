@@ -420,7 +420,7 @@ For the fixed effects model, the following assumptions are made:
 
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, include=FALSE, results="hide"}
  data(Fatalities)
 af=data.frame(Fatalities)
 af$rate=(af$afatal/af$pop)*10000
@@ -492,7 +492,7 @@ summary(pan.north)
 coeftest(pan.north, vcov = vcovHC, type = "HC1")
 
 ```
-```{r Diagnostics}
+```{r Diagnostics,echo = FALSE }
 fit_vals <- function(mod) {
    return (as.numeric(mod$model[[1]] - mod$residuals) )
 }
@@ -506,7 +506,7 @@ qqline(pan.total$res)
 mtext("Diagnostic Plots All States", outer = TRUE, cex = 1.5)
 
 ```
-```{r}
+```{r,echo = FALSE}
 par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
 plot(fit_vals(pan.south), pan.south$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
 abline(lm(pan.south$res~fit_vals(pan.south)), col="red") 
@@ -517,7 +517,7 @@ qqline(pan.south$res)
 mtext("Diagnostic Plots Southern States", outer = TRUE, cex = 1.5)
 
 ```
-```{r}
+```{r, echo = FALSE}
 par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
 
 
@@ -545,7 +545,7 @@ For these variables, we have two hypotheses about the variables' affects on one 
 
 We plan on using a two-way linear model, so we will first look at the pair plots of our observations and outcome:
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include = FALSE}
 Fatalities$afatalper10k <- (Fatalities$afatal / Fatalities$pop) * 10000
 Fatalities$afatalper100kmiles <- (Fatalities$afatal / Fatalities$milestot) * 100000
 Fatalities <- Fatalities[c("year", "state", "spirits", "beertax", "afatalper10k")]
@@ -583,11 +583,11 @@ plot_err_vs_fit(reduced_model,"Red. Model")
 check.normality.assumptions(reduced_model)$`p-value`
 ```
 
-```{r}
+```{r, echo = FALSE, message=TRUE, results="hide"}
 bptest(reduced_model)$p.value
 ```
 
-```{r}
+```{r, echo = FALSE}
 # Try examining YoY changes
 Fatalities$year <- as.Date(ISOdate(Fatalities$year, 12, 31))  # Convert year column to date type
 # head(Fatalities)
@@ -616,7 +616,7 @@ ggpairs(
 # summary(lm(afatalper10k ~ beertax + state, Fatalities_diff))
 ```
 
-```{r}
+```{r,echo = FALSE, results="hide"}
 beertax_plm <- plm(
     afatalper10k ~ beertax + state + year,
     index=c("state", "year"),

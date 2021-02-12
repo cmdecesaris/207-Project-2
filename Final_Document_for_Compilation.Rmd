@@ -53,7 +53,7 @@ Based on the literature, drinking age seems to be a state's first-line of defens
 
 ##depiction of the models we use in statistical terms
 
-### Model Fit
+### Best Model Fit
 ```{r, echo = FALSE, message=FALSE, results = 'hide'}
 library(ggplot2)
 library(viridis)
@@ -243,6 +243,47 @@ $$ ln(Y_{1988}) = -0.3367+ 0.0190X_{region, other} + 0.1032X_{region, south} - 0
 **(ii)** Model 3: $\hat{\beta_{3}}$ Souhtern states had  11087 more alcohol fatalities on average compared to  north eastern states, holding all other variables constant. In other words,    
 
 
+### Fixed Regression Models for effectiveness of State Laws
+
+To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States. 
+
+Southern: Louisiana, Mississippi, Alabama, Georgia, South Carolina,North Carolina, Arkansas, Texas, Florida, Tennessee, Oklahoma, Kentucky, West Virginia, and Virginia. 
+
+***INSERT MAP?***
+
+North Eastern: Maine, Vermont, New Hampshire, Massachusetts, New York, Rhode Island, New Jersey, Delaware Maryland, Pennsylvania. 
+In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty. 
+
+The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. In many ways, this is wishful thinking, as there are likely factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
+
+Because not every state changed their laws over the time period, a linear regression model with fixed time and state effects was selected. The fixed effect model seeks to account for variability with in each fixed year and fixed state. That is, we assume there are influential factors within each state and year not accounted for in the observed data. In the fixed model:
+
+$$Y_{it} = \beta_0 + \beta_1 X_{1,it} +\cdots+\beta_1 X_{k,it} + \gamma_2 E2 +\cdots + \gamma_n En + \delta_2 D2 + \cdots +  \delta_T DT + u_{it} .$$
+
+where $t=1,...,T$ represents the year (time) and $i=1,...,n$ represents the collection of instances for each state $i$ (entity). 
+
+There are n-1 dummy variables for states.
+$Ei$ represents the binary dummy variable which accounts for the fixed effect of state $i$ with its respective coefficient $\gamma_i$.
+
+There are T-1 dummy variables for years
+$Dt$ represents the binary dummy variable which accounts for the fixed effect of year $t$ with its respective coefficient $\delta_t$.
+
+Notice how the dummy variables $ \gamma_1 E1$ and $ \delta_1 D1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $ \gamma_1 E_1$ is represented when $ \gamma_2 E2= \cdots =\gamma_n EN=0$
+
+$u_{it}$ represents the error terms and $\beta_1 X_{k,it}$ represents the $kth$ predictor. 
+
+For the fixed effects model, the following assumptions are made:
+
+- The error terms when conditioned on the aggressors, have a mean equal to zero, that is, $E(u_{it}|X_{1,it},\cdots,X_{k,it})=0$
+- The regressor terms and errors for all $i=1,\cdots,n$ are $i.i.d.$ from their joint distribution.
+- There is no perfect multicollinearity
+- There are not significant outliers
+ 
+ A simpler, project specific version of the model using only BreathTest and Penalty for regressiors is:
+ 
+ $\hat{FatalityRate}_{region} = \beta_1 * Penalty + \beta_2 * BreathTest + StateEffects + TimeEffects$
+ 
+ In this form of the model the intercept $\beta_0$ is incorporated with in $StateEffects + TimeEffects$.
 
 
 # Sensitivity analysis 

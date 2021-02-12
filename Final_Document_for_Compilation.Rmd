@@ -110,6 +110,7 @@ af=as.data.frame(Fatalities)#Christina's data
 ```{r, echo = FALSE}
 hist(drinking_age)
 ```
+### add titles and axes lables to graphs?
 
 ```{r, echo = FALSE, results = "hide", warning=FALSE}
 library(dplyr)

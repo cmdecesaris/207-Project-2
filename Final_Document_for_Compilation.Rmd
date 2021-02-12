@@ -46,9 +46,105 @@ Preliminary analysis suggests that law-changes were similar between the southeas
 
 
 ## Drinking Age
-Based on the literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities. Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (p = ). State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
+Based on the literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities. Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
 
-**Insert table with the, like, 6 ANOVA results.
+The notation for the test performed (two-way ANOVA) to determine significance of drinking age and state is as follows:
+
+$$Y_{ijk} = \mu_{\cdot\cdot} + \alpha_i+\beta_j + (\alpha\beta)_{ij}+\epsilon_{ijk}$$ 
+
+such that $k=1,..., n, j=1,..., b, i=1,..., a$ 
+ 
+where ${\epsilon_{ijk}}$ are i.i.d (independently and identically distributed), such that $N(0,\sigma^2)$.
+Y is the alcohol-related vehicle fatalities, $\alpha$ is the effect due to i (minimum drinking age), $\beta$ is the effect due to j (state), $\mu$ is the overall mean response, and $\epsilon$ is the residual. k is the index from 1 to the number of rows of the data.
+
+This formation of notation was adapted from STA207 [class notes](https://hub.gke2.mybinder.org/user/chenshizhe-statdatascience-ib1xrgdt/notebooks/Notes/Chapter4ANOVAII.ipynb), section 4.3. [This page](https://www.itl.nist.gov/div898/handbook/prc/section4/prc437.htm) was also referenced.
+
+```{r, echo = FALSE}
+drinking_age <- Fatalities$drinkage
+alcohol_fat <- Fatalities$afatal
+night_youth<- Fatalities$fatal1517
+night_YA <- Fatalities$fatal1820
+night_legal <- Fatalities$fatal2124
+
+a_rate <-  (Fatalities$afatal/Fatalities$pop)*10000
+Fatalities <- cbind(Fatalities,a_rate)
+```
+
+```{r, echo = FALSE}
+hist(drinking_age)
+```
+
+```{r, echo = FALSE, results = "hide"}
+
+par(mfrow=c(2,2))
+plot(drinking_age,alcohol_fat)
+plot(drinking_age,night_youth)
+plot(drinking_age,night_YA)
+plot(drinking_age,night_legal)
+par(mfrow=c(1,1))
+
+alc_age <- lm(a_rate~as.factor(drinking_age))
+plot(alc_age)
+
+Fatalities[281:283,]
+newdata <- Fatalities[order(-Fatalities$afatal),]
+
+anova_fat <- aov(a_rate~as.factor(drinking_age), data = Fatalities)
+summary(anova_fat)
+
+
+anova_fat_state <- aov(a_rate~as.factor(drinking_age)*as.factor(state), data = Fatalities)
+summary(anova_fat_state)
+
+anova_fat_state <- aov(a_rate~as.factor(drinking_age)+as.factor(state), data = Fatalities)
+summary(anova_fat_state)
+
+plot(anova_fat_state)
+Fatalities[112,]
+Fatalities[211,]
+Fatalities[which(Fatalities$state == "la"),]
+
+
+south= Fatalities%>%filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ar","ok","ky","wv","va"))
+n_east= Fatalities%>%filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
+```
+
+```{r, echo = FALSE}
+
+anova_fat_state_south <- aov(afatal~as.factor(drinkage)*as.factor(state), data = south)
+anova_fat_state_south_sum <- summary(anova_fat_state_south)
+
+Variable <- c("Drinking Age", "State","Interaction DrinkingAge:State")
+FValue <- c(42.89,90.03,9.31)
+PValue <- c("<2e-16","<2e-16",5.14e-09)
+stat <- data.frame(Variable, FValue, PValue)
+
+#from Christina
+datatable(stat,class = 'cell-border stripe', 
+ caption = htmltools::tags$caption(
+    style = 'caption-side: top; text-align: center;',
+    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Southern Region')), colnames= )
+
+
+
+anova_fat_state_north <- aov(afatal~as.factor(drinkage)*as.factor(state), data = n_east)
+summary(anova_fat_state_north)
+
+Variable <- c("Drinking Age", "State","Interaction DrinkingAge:State")
+FValue <- c(87.200,220.933,0.848)
+PValue <- c("<2e-16","<2e-16",0.577)
+stat <- data.frame(Variable, FValue, PValue)
+
+#from Christina
+datatable(stat,class = 'cell-border stripe', 
+ caption = htmltools::tags$caption(
+    style = 'caption-side: top; text-align: center;',
+    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Northern Region')), colnames= )
+
+anova_fat_state_n_nointeract <- aov(afatal~as.factor(drinkage)+as.factor(state), data = n_east)
+summary(anova_fat_state_n_nointeract)
+
+```
 
 ## Inferential analysis
 
@@ -264,7 +360,7 @@ $Ei$ represents the binary dummy variable which accounts for the fixed effect of
 There are T-1 dummy variables for years
 $Dt$ represents the binary dummy variable which accounts for the fixed effect of year $t$ with its respective coefficient $\delta_t$.
 
-Notice how the dummy variables $ \gamma_1 E1$ and $ \delta_1 D1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $ \gamma_1 E_1$ is represented when $ \gamma_2 E2= \cdots =\gamma_n EN=0$
+Notice how the dummy variables $\gamma_1 E1$ and $\delta_1 D1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $\gamma_1 E_1$ is represented when $\gamma_2 E2= \cdots =\gamma_n EN=0$
 
 $u_{it}$ represents the error terms and $\beta_1 X_{k,it}$ represents the $kth$ predictor.
 

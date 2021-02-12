@@ -32,10 +32,10 @@ data(Fatalities)
 
 # Abstract
 
-Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some 
-(Perrine et al., 1989). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents 
+Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some
+(Perrine et al., 1989). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents
 (Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates. Drinking age and state were both significantly correlated to alcohol-related traffic fatalities, suggesting that other state laws play a role in observed trends. We found these predictor variables to be the most important for the years 1982, 1985, 1988:
-region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits.   
+region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits.
 The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
 
   - *Beertax (Camron)*
@@ -58,7 +58,7 @@ In particular:
 
  - Is it possible to imply causality between these changes and the decrease or increase of alcohol-related traffic fatalities?
 
-We hypothesize that alcohol-related traffic fatality will *not* be significantly correlated with drinking age, beer tax, or a more-stringent sentencing for drunk driving offenses 
+We hypothesize that alcohol-related traffic fatality will *not* be significantly correlated with drinking age, beer tax, or a more-stringent sentencing for drunk driving offenses
 (Perrine et al., 1989). Insight regarding these these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
 
 # Background
@@ -80,8 +80,8 @@ Preliminary analysis suggests that law-changes were similar between the southeas
 </center>
 
 ## Drinking Age
-Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities 
-(Lovenheim & Slemrod, 2010). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study. Diagnostics confirm that distribution of drinking age is not normal. Additionally, there is an outlier will undue pull (Louisiana in 1988). 
+Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities
+(Lovenheim & Slemrod, 2010). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study. Diagnostics confirm that distribution of drinking age is not normal. Additionally, there is an outlier will undue pull (Louisiana in 1988).
 
 The notation for the test performed (two-way ANOVA) to determine significance of drinking age and state is as follows:
 
@@ -413,14 +413,14 @@ n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj"
 
 southa_graph = southa%>%filter(year%in% c("1982","1988"))
 
-s_pean=ggplot(southa_graph, aes(factor(state), rate )) + geom_point(aes(shape = factor(year),color=factor(penalty)),size=5 )+labs(x="State", y="Fatality Rate",  
+s_pean=ggplot(southa_graph, aes(factor(state), rate )) + geom_point(aes(shape = factor(year),color=factor(penalty)),size=5 )+labs(x="State", y="Fatality Rate",
        col="Penalty",shape="Year",title="Fatality Rate and Penality Policy 82,88")+  theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
         axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))+ geom_line()
 
 
 s_breath=ggplot(southa_graph, aes(factor(state), rate )) +
   geom_point(aes( shape =factor(year),color=factor(breath)),size=5 )+geom_line()+
-  labs(x="State", y="Fatality Rate", col="Breath",shape="Year",title="Fatality Rate and Breath Test Policy 82,88")+ 
+  labs(x="State", y="Fatality Rate", col="Breath",shape="Year",title="Fatality Rate and Breath Test Policy 82,88")+
   theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
         axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))
 
@@ -434,14 +434,14 @@ grid.arrange(s_pean, s_breath, ncol=2, top = textGrob("Southern States",gp=gpar(
 
 northa_graph = n_easta%>%filter(year%in% c("1982","1988"))
 
-n_pean=ggplot(northa_graph, aes(factor(state), rate )) + geom_point(aes(shape = factor(year),color=factor(penalty)),size=5 )+labs(x="State", y="Fatality Rate",  
+n_pean=ggplot(northa_graph, aes(factor(state), rate )) + geom_point(aes(shape = factor(year),color=factor(penalty)),size=5 )+labs(x="State", y="Fatality Rate",
        col="Penalty",shape="Year",title="Fatality Rate and Penality Policy 82,88")+  theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
         axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x =element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))+ geom_line()
 
 
 n_breath=ggplot(northa_graph, aes(factor(state), rate )) +
   geom_point(aes( shape =factor(year),color=factor(breath)),size=5 )+geom_line()+
-  labs(x="State", y="Fatality Rate", col="Breath",shape="Year",title="Fatality Rate and Breath Test Policy 82,88")+ 
+  labs(x="State", y="Fatality Rate", col="Breath",shape="Year",title="Fatality Rate and Breath Test Policy 82,88")+
   theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
         axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))
 
@@ -553,7 +553,7 @@ fit_vals <- function(mod) {
 
 par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
 plot(fit_vals(pan.total), pan.total$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
-abline(lm(pan.total$res~fit_vals(pan.total)), col="red") 
+abline(lm(pan.total$res~fit_vals(pan.total)), col="red")
 
 qqnorm(pan.total$res)
 qqline(pan.total$res)
@@ -563,7 +563,7 @@ mtext("Diagnostic Plots All States", outer = TRUE, cex = 1.5)
 ```{r,echo = FALSE}
 par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
 plot(fit_vals(pan.south), pan.south$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
-abline(lm(pan.south$res~fit_vals(pan.south)), col="red") 
+abline(lm(pan.south$res~fit_vals(pan.south)), col="red")
 
 qqnorm(pan.south$res)
 qqline(pan.south$res)
@@ -576,7 +576,7 @@ par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
 
 
 plot(fit_vals(pan.north), pan.north$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
-abline(lm(pan.north$res~fit_vals(pan.north)), col="red") 
+abline(lm(pan.north$res~fit_vals(pan.north)), col="red")
 
 qqnorm(pan.north$res)
 qqline(pan.north$res)
@@ -597,9 +597,11 @@ For these variables, we have two hypotheses about the variables' affects on one 
   1. Beer taxes will have a *positive relationship* with spirit consumption; As taxes on beer go up one becomes deterred from purchasing beer, and their likelihood of alternatively choosing spirits goes up.
   2. Fatality rate has a *negative relationship* with beer taxes.
 
+### Model
+
 We plan on using a two-way linear model, so we will first look at the pair plots of our observations and outcome:
 
-```{r, echo=FALSE, include = FALSE}
+```{r, echo=FALSE}
 Fatalities$afatalper10k <- (Fatalities$afatal / Fatalities$pop) * 10000
 Fatalities$afatalper100kmiles <- (Fatalities$afatal / Fatalities$milestot) * 100000
 Fatalities <- Fatalities[c("year", "state", "spirits", "beertax", "afatalper10k")]
@@ -622,10 +624,39 @@ The notation for our two models are as follows:
 ```{r, echo=FALSE}
 full_model <- lm(afatalper10k ~ beertax + spirits + beertax * spirits, avg_fatalities)
 reduced_model <- lm(afatalper10k ~ beertax + spirits, avg_fatalities)
-as.data.frame(summary(full_model)$coefficients)
-as.data.frame(summary(reduced_model)$coefficients)
-# Use reduced model
+full_coef <- summary(full_model)$coefficients
+reduced_coef <- summary(reduced_model)$coefficients
 ```
+
+$$Y_{full} = `r full_coef[1,1]` + `r full_coef[2,1]`X_{beertax} - `r abs(full_coef[3,1])`X_{spirits} - `r abs(full_coef[4,1])`X_{beertax}X_{spirits}$$
+$$Y_{reduced} = `r reduced_coef[1,1]` + `r reduced_coef[2,1]`X_{beertax} - `r abs(reduced_coef[3,1])`X_{spirits}$$
+
+<center>
+Coefficients summaries for the full model
+```{r, echo=FALSE}
+as.data.frame(full_coef)
+```
+
+Coefficients summaries for the reduced model
+```{r, echo=FALSE}
+as.data.frame(reduced_coef)
+```
+</center>
+
+The p-value for the interaction term in our reduced model is `r round(full_coef[4,4], digits=2)` so we can say that the interaction term has no effect and we should use the reduced model.
+
+Looking at the reduced model parameters, we can check to see if our initial hypotheses are true.
+
+* With a p-value of `r round(reduced_coef[3,4], digits=2)` it looks like **spirit consumption has no effect on alcohol-related fatalities**.
+* We can see that **beer taxes do have an effect on alcohol related fatalities** with that term having a p-value of `r round(reduced_coef[2,4], digits=4)`.
+*However*, this result is the opposite of our hypothesis because the coefficient is positive, meaning as beer taxes increase the number of alcohol-related fatalities also increases.
+
+Neither of our hypotheses were true, and the reverse of our expectation on beer taxes is quite interesting.
+This observation contradicts the logic we used in our hypothesis so we will look into this further after the diagnostics section.
+
+### Diagnostics
+
+Plotting the diagnostic measures for our
 
 ```{r, echo=FALSE}
 par(mfrow = c(1,2))
@@ -633,13 +664,32 @@ plot_qq(reduced_model,"Red. Model")
 plot_err_vs_fit(reduced_model,"Red. Model")
 ```
 
-```{r, echo = FALSE, results="hide"}
+#### Test for Normality
+```{r, echo = FALSE}
 check.normality.assumptions(reduced_model)$`p-value`
 ```
 
-```{r, echo = FALSE, message=TRUE, results="hide"}
+#### Test for Constant Variance
+```{r, echo = FALSE}
 bptest(reduced_model)$p.value
 ```
+
+### Addressing Concerns
+
+Although our intiail model identified a relationship between beer taxes and alcohol-related fatality numbers, it is not what we expected.
+The positive relationship between these two variables seems counterintuitive at first; If beer costs more to buy, wouldn't that deter consumption and thus lead to fewer associated traffic fatalities?
+This initial assumption we made does not appear to hold based on these results.
+
+That being said, what explains this relationship?
+Although it is clear that beer taxes cannot be used as a proxy for beer consumption, we can still infer that higher beer consumption has a positive relationship with alcohol-related traffic fatalities.
+That being said, our next hypothesis is that *the relationship between beer taxes and fatalities is a non-causal relationship*.
+Our guess is that each state's government imposes beer taxes based on the amount consumsed because the consumption rate is unaffected ny price changes.
+
+To test this causal relationship we will look at the same variables as a year-over-year difference as opposed to a mean aggregation over every year.
+This will allow us to see how the alcohol related fatalities responds to changes in beer taxation.
+Based on our hypothesis, our expectation is that there is no relationship between the yearly change of these variables.
+
+To start we will look at a pair plot of the same variables, but for year-over-year changes instead of overall state averages:
 
 ```{r, echo = FALSE}
 # Try examining YoY changes
@@ -670,7 +720,10 @@ ggpairs(
 # summary(lm(afatalper10k ~ beertax + state, Fatalities_diff))
 ```
 
-```{r,echo = FALSE, results="hide"}
+Looking at these pair plots, it appears that there isn't much correlation between any of our variables.
+To quantify this, we will use
+
+```{r,echo = FALSE}
 beertax_plm <- plm(
     afatalper10k ~ beertax + state + year,
     index=c("state", "year"),
@@ -687,19 +740,19 @@ coeftest(beertax_plm, vcov=vcovHC, type="HC1")
 
 # Conclusion
 
-This project examines the relationship between state-level policies (particularly drinking age, penalties, and beer tax) and the number of alcohol-related traffic fatalities in the United States. 
+This project examines the relationship between state-level policies (particularly drinking age, penalties, and beer tax) and the number of alcohol-related traffic fatalities in the United States.
 
 - Findings in the inferential analysis interpreted in the context of Fatalities.
 
 - Caveats of the current analysis.
 
-Since now the nation-wide drinking age in the United States is 21, drinking age is no longer a relevant strategy for drunk driving prevention. Beer tax does not seem to impact alcohol fatalities, which reflects the findings in previous literature (Mast et al. 1999). They found that beer tax does not impact the heaviest drinkers, which is why it may not translate well as a prevention. 
+Since now the nation-wide drinking age in the United States is 21, drinking age is no longer a relevant strategy for drunk driving prevention. Beer tax does not seem to impact alcohol fatalities, which reflects the findings in previous literature (Mast et al. 1999). They found that beer tax does not impact the heaviest drinkers, which is why it may not translate well as a prevention.
 This is a public health/epidemiology issue not just a public policy issue. Psychologists, medicine, addiction and trauma counselors may also have role in this above and beyond policy makers (Perrine et al., 1989).
 
 # Acknowledgement {-}
 
 <span style='color:blue'>
-This project has only been discussed within the group. 
+This project has only been discussed within the group.
 </span>
 
 # Reference {-}
@@ -747,7 +800,7 @@ Drunk driving. (2021, January 12). Retrieved February 12, 2021, from https://www
 
 (Perrine et al., 1989)
 
-Perrine, M. & Peck, Raymond & Fell, James. (1989). Epidemiologic Perspectives on Drunk Driving. 
+Perrine, M. & Peck, Raymond & Fell, James. (1989). Epidemiologic Perspectives on Drunk Driving.
 
 [Drunk driving from an epidemiology perspective](https://www.researchgate.net/profile/James_Fell2/publication/242431276_Epidemiologic_Perspectives_on_Drunk_Driving/links/00b4953720449b1137000000.pdf) Published in the 80s, helps define the public health aspect of this question and conundrum.
 

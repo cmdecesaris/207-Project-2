@@ -48,8 +48,8 @@ avg_fatalities
 ```
 
 ```{r}
-full_model <- lm(afatalper10k~beertax+spirits+beertax*spirits, avg_fatalities)
-reduced_model <- lm(afatalper10k~beertax+spirits, avg_fatalities)
+full_model <- lm(afatalper10k ~ beertax + spirits + beertax * spirits, avg_fatalities)
+reduced_model <- lm(afatalper10k ~ beertax + spirits, avg_fatalities)
 summary(full_model)
 summary(reduced_model)
 anova(reduced_model, full_model)
@@ -60,7 +60,7 @@ anova(reduced_model, full_model)
 # p_values <- data.frame(state=factor(), p_value=double())
 
 # for (state_name in levels(Fatalities$state)) {
-#     summ <- summary(lm(afatalper10k~beertax, subset(Fatalities, state == state_name)))
+#     summ <- summary(lm(afatalper10k ~ beertax, subset(Fatalities, state == state_name)))
 #     print(summ$coefficients[2, 4])
 #     # p_values <- rbind(p_values, c(state=state_name, p_values=summ$coefficients[2, 4]))
 #     # print(summ$coefficients[2, 4])
@@ -68,6 +68,29 @@ anova(reduced_model, full_model)
 # }
 
 # head(p_values)
+```
+
+```{r}
+library("plm")
+
+# full_model <- plm(
+#     afatalper10k ~ state + beertax + spirits + beertax * spirits,
+#     index=c("state"),
+#     model="within",
+#     effect="twoways",
+#     data=avg_fatalities
+# )
+# reduced_model <- plm(
+#     afatalper10k ~ state + beertax + spirits,
+#     index=c("state"),
+#     model="within",
+#     effect="twoways",
+#     data=avg_fatalities
+# )
+# summary(full_model)
+# summary(reduced_model)
+# anova(reduced_model, full_model)
+# Use reduced model
 ```
 
 ```{r}
@@ -87,9 +110,9 @@ hist(residuals.semistd)
 
 ```{r}
 # Checking the ranges on beertax and afatalper10k
-beertax_ranges <- aggregate(.~state, Fatalities[c("state", "beertax", "afatalper10k")], function(x) max(x) - min(x))
+beertax_ranges <- aggregate(. ~ state, Fatalities[c("state", "beertax", "afatalper10k")], function(x) max(x) - min(x))
 beertax_ranges[with(beertax_ranges, order(beertax)),]
-new_model <- aov(afatalper10k~beertax+state+state*beertax, Fatalities)
+new_model <- aov(afatalper10k ~ beertax + state + state * beertax, Fatalities)
 summary(new_model)
 ```
 
@@ -115,10 +138,18 @@ head(Fatalities_diff, 20)
 ggpairs(Fatalities_diff[c("spirits", "beertax", "afatalper10k")])
 
 # Model for all states
-summary(lm(afatalper10k~beertax+state, Fatalities_diff))
+summary(lm(afatalper10k ~ beertax + state, Fatalities_diff))
+```
 
-# One model per state
-# for (state_name in levels(Fatalities$state)) {
-#     print(summary(lm(afatalper10k~beertax, subset(Fatalities_diff, state == state_name))))
-# }
+```{r}
+beertax_plm <- plm(
+    afatalper10k ~ beertax + state + year,
+    index=c("state", "year"),
+    model="within",
+    effect="twoways",
+    data=Fatalities_diff
+)
+
+summary(beertax_plm)
+coeftest(beertax_plm, vcov=vcovHC, type="HC1")
 ```

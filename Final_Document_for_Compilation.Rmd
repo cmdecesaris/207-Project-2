@@ -404,7 +404,7 @@ n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj"
 
 
 ```{r}
-pan.total <- plm(log(a_rate
+pan.total <- plm(log(rate
 ) ~ penalty +breath+ state + year,
 index = c("state", "year"),
 model = "within",
@@ -418,7 +418,7 @@ coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 ```{r}
 
-pan.south <- plm(log(a_rate
+pan.south <- plm(log(rate
 ) ~penalty+breath+ state + year,
 index = c("state", "year"),
 model = "within",
@@ -430,7 +430,7 @@ coeftest(pan.south, vcov = vcovHC, type = "HC1")
 ```
 ```{r}
 
-pan.north <- plm(log(a_rate
+pan.north <- plm(log(rate
 ) ~ state + year+beertax,
 index = c("state", "year"),
 model = "within",

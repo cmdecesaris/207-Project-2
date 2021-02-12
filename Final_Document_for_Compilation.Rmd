@@ -688,7 +688,8 @@ coeftest(beertax_plm, vcov=vcovHC, type="HC1")
 # Conclusion
 
 This project examines the relationship between state-level policies (particularly drinking age, penalties, and beer tax) and the number of alcohol-related traffic fatalities in the United States. 
-- Findings in the inferential analysis interpreted in the context of Project STAR.
+
+- Findings in the inferential analysis interpreted in the context of Fatalities.
 
 - Caveats of the current analysis.
 

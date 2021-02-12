@@ -30,7 +30,9 @@ data(Fatalities)
 
 # Abstract
 
-Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some (Perrine, Peck, Fell). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents (Lovenheim, Slemrod; Mast, Benson, Rasmussen). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates.  WHAT METHODS WE USED (1 SENTENCE).
+Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some 
+(Perrine et al., 1989). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents 
+(Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates.  WHAT METHODS WE USED (1 SENTENCE).
 
   - *Drinking age study (Mary) *
 
@@ -46,7 +48,7 @@ WHAT WERE THE RESULTS (2 SENTENCES).
 
 Traffic fatalities related to alcohol consumption is a significant cause of traffic-related death in the United States. In 2018, over 10,000 people died from crashes due to intoxicated driving, comprising nearly 30% of the year's traffic fatalities. Some researchers have likened the impact of these deaths to a epidemiological issue given the complex social and cultural circumstances that surround drinking  (National Highway Traffic Safety Administration). To help combat the problem, public representatives have implemented several different types of laws. These kinds of laws are broadly defined as "decreasing opportunity", or "preventing recidivism". In other words, these laws either: 1) make it less convenient (and theoretically, less probable) that one individual would drive drunk, or 2) make the penalty so large for a first offense that a previous offender will correct their behavior the next time. Successful deterrence of driving-while-intoxicated has the potential to save the lives of many citizens.
 
-In the 1980s, faced with the stark statistics, lawmakers implemented various laws related to, among other things, drinking age, beer tax and drunk driving penalties (Stock and Watson). These laws were accumulated and described in a data set that will be discussed in greater detail later in this report. The goal of this report is to study the efficacy of these law changes, across the United States, and over the course of the 1980s.
+In the 1980s, faced with the stark statistics, lawmakers implemented various laws related to, among other things, drinking age, beer tax and drunk driving penalties (Stock & Watson). These laws were accumulated and described in a data set that will be discussed in greater detail later in this report. The goal of this report is to study the efficacy of these law changes, across the United States, and over the course of the 1980s.
 
 In particular:
 
@@ -56,11 +58,12 @@ In particular:
 
  - Is it possible to imply causality between these changes and the decrease or increase of alcohol-related traffic fatalities?
 
-We hypothesize that alcohol-related traffic fatality will *not* be significantly correlated with drinking age, beer tax, or a more-stringent sentencing for drunk driving offenses (Mast et al, Perrine, Peck, Fell). Insight regarding these these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
+We hypothesize that alcohol-related traffic fatality will *not* be significantly correlated with drinking age, beer tax, or a more-stringent sentencing for drunk driving offenses 
+(Perrine et al., 1989). Insight regarding these these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
 
 # Background
 
-The data used in this experiment was compiled by Stock and Watson for their 2007 Textbook "Introduction to Econometrics" (Stock and Watson). This compilation allowed students to look at alcohol-related laws and their impact on drunk driving. This set is available through AER as the "Fatalities" data set, where it is more completely described. The target population of the original data was all 50 states in the USA, during the 1980s. The population is reported from each state, along with statistics including total traffic fatalities, alcohol-related traffic fatalities, and subsets of those variables separated by age. The "sampling" mechanism was reported accidents and fatalities available in the public domain. While some accidents (minor, on private property, or no injuries for instance) may not have been reported, it is relatively safe to presume that all instance were reported. Totals (for counts) or means (for values) associated with each variable were aggregated on a yearly basis by state. The variables used in this study include: "beer tax", "spirits", "drinking age", "breath indicator", "service", "jail", "miles", "dry". "Beer tax" is the state tax that a state has imposed on beer. "Spirits" is the numeric representation of spirit consumption (higher alcohol content beverages). Drinking age is the age at which consuming or buying alcohol is legal. "Breath indicator", "jail" and "service" describe if the respective penalty is imposed in the state. Service and jail were combined into one score, known as "penalties". "Miles" is the average distance driven by a person living in that state per year. "Dry" represents the percentage of people living in a county which includes alcohol restrictions.
+The data used in this experiment was compiled by Stock and Watson (2007)for their 2007 Textbook "Introduction to Econometrics." This compilation allowed students to look at alcohol-related laws and their impact on drunk driving. This set is available through AER as the "Fatalities" data set, where it is more completely described. The target population of the original data was all 50 states in the USA, during the 1980s. The population is reported from each state, along with statistics including total traffic fatalities, alcohol-related traffic fatalities, and subsets of those variables separated by age. The "sampling" mechanism was reported accidents and fatalities available in the public domain. While some accidents (minor, on private property, or no injuries for instance) may not have been reported, it is relatively safe to presume that all instance were reported. Totals (for counts) or means (for values) associated with each variable were aggregated on a yearly basis by state. The variables used in this study include: "beer tax", "spirits", "drinking age", "breath indicator", "service", "jail", "miles", "dry". "Beer tax" is the state tax that a state has imposed on beer. "Spirits" is the numeric representation of spirit consumption (higher alcohol content beverages). Drinking age is the age at which consuming or buying alcohol is legal. "Breath indicator", "jail" and "service" describe if the respective penalty is imposed in the state. Service and jail were combined into one score, known as "penalties". "Miles" is the average distance driven by a person living in that state per year. "Dry" represents the percentage of people living in a county which includes alcohol restrictions.
 # Descriptive analysis
 
 The rate of alcohol-related drinking fatalities fluctuated by state over the 7 years included in this study. It appears that alcohol related traffic fatalities decreases in most states over most year.
@@ -77,7 +80,8 @@ Preliminary analysis suggests that law-changes were similar between the southeas
 </center>
 
 ## Drinking Age
-Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities (Lovenheim, Slemrod). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
+Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities 
+(Lovenheim & Slemrod, 2010). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
 
 The notation for the test performed (two-way ANOVA) to determine significance of drinking age and state is as follows:
 
@@ -497,7 +501,7 @@ Note that we will need to validate this assumption in order for any dependent re
 
 For these variables, we have two hypotheses about the variables' affects on one another:
 
-  1. Beer taxes will have a *positive relationship* with spirit consumption; As taxes on beer go up one becomes deterred from purchasing beer, and their likelyhood of alternatively choosing spirits goes up.
+  1. Beer taxes will have a *positive relationship* with spirit consumption; As taxes on beer go up one becomes deterred from purchasing beer, and their likelihood of alternatively choosing spirits goes up.
   2. Fatality rate has a *negative relationship* with beer taxes.
 
 We plan on using a two-way linear model, so we will first look at the pair plots of our observations and outcome:

@@ -57,6 +57,47 @@ anova(reduced_model, full_model)
 ```
 
 ```{r}
+plot_qq = function(M, y){
+qqnorm(M$residuals, main = sprintf("QQPlot %s", y))
+qqline(M$residuals)
+}
+plot_qq(reduced_model, "Reduced Model")
+```
+
+```{r}
+plot_err_vs_fit = function(M,y){
+plot(M$fitted.values, M$residuals, main = sprintf("Errors vs.Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors")
+abline(h = 0,col = "purple")
+}
+plot_err_vs_fit(reduced_model, "Reduced Model")
+```
+
+```{r}
+library(viridis)
+library(AER)
+library(MASS)
+check.normality.assumptions = function(M){
+  #qqnorm(M$residuals)
+  #qqline(M$residuals)
+  the.SWtest = shapiro.test(M$residuals)
+  pValue = the.SWtest$p.value
+  if (pValue < (0.01|0.05|0.1)){
+    bc = boxcox(M,plotit = FALSE)
+    lambda = bc$x[which.max(bc$y)]
+    lambda #To see the value of lambda, transform to ln(y)
+
+  results = list("p-value" = pValue, "lambda" = lambda)
+  return(results)
+  }
+}
+check.normality.assumptions(reduced_model)
+```
+
+```{r}
+bptest(reduced_model)
+```
+
+```{r}
 # p_values <- data.frame(state=factor(), p_value=double())
 
 # for (state_name in levels(Fatalities$state)) {

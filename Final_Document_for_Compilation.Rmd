@@ -6,9 +6,10 @@ output:
   html_document:
     df_print: paged
     #number_sections: yes
+    graphics: yes
 ---
-```{r global_options, include=FALSE}
-knitr::opts_chunk$set(fig.pos = 'H')
+```{r global_options, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(fig.pos='H', fig.align='center')
 ```
 
 ```{r,echo = FALSE, results = "hide", include=FALSE}
@@ -21,6 +22,8 @@ library(car)
 library(DT)
 library(AER)
 library(plm)
+library(GGally)
+library(zoo)
 data(Fatalities)
 ```
 
@@ -48,24 +51,26 @@ The data used in this experiment was compiled by Stock and Watson for their 2007
 
 The rate of alcohol-related drinking fatalities fluctuated by state over the 7 years included in this study. It appears that alcohol related traffic fatalities decreases in most states over most year.
 
+<center>
 ![](full_us.gif)
+</center>
 
 Preliminary analysis suggests that law-changes were similar between the southeastern-to-southcentral region and the northeastern-to-midatlantic region.
 
+<center>
 <img src="south.gif" width="450"/>
 <img src="northeast.gif" width="450"/>
-
-
+</center>
 
 ## Drinking Age
 Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities (Lovenheim, Slemrod). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
 
 The notation for the test performed (two-way ANOVA) to determine significance of drinking age and state is as follows:
 
-$$Y_{ijk} = \mu_{\cdot\cdot} + \alpha_i+\beta_j + (\alpha\beta)_{ij}+\epsilon_{ijk}$$ 
+$$Y_{ijk} = \mu_{\cdot\cdot} + \alpha_i+\beta_j + (\alpha\beta)_{ij}+\epsilon_{ijk}$$
 
-such that $k=1,..., n, j=1,..., b, i=1,..., a$ 
- 
+such that $k=1,..., n, j=1,..., b, i=1,..., a$
+
 where ${\epsilon_{ijk}}$ are i.i.d (independently and identically distributed), such that $N(0,\sigma^2)$.
 Y is the alcohol-related vehicle fatalities, $\alpha$ is the effect due to i (minimum drinking age), $\beta$ is the effect due to j (state), $\mu$ is the overall mean response, and $\epsilon$ is the residual. k is the index from 1 to the number of rows of the data.
 
@@ -133,7 +138,7 @@ PValue <- c("<2e-16","<2e-16",5.14e-09)
 stat <- data.frame(Variable, FValue, PValue)
 
 #from Christina
-datatable(stat,class = 'cell-border stripe', 
+datatable(stat,class = 'cell-border stripe',
  caption = htmltools::tags$caption(
     style = 'caption-side: top; text-align: center;',
     'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Southern Region')), colnames= )
@@ -147,7 +152,7 @@ PValue <- c("<2e-16","<2e-16",0.577)
 stat <- data.frame(Variable, FValue, PValue)
 
 #from Christina
-datatable(stat,class = 'cell-border stripe', 
+datatable(stat,class = 'cell-border stripe',
  caption = htmltools::tags$caption(
     style = 'caption-side: top; text-align: center;',
     'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Northern Region')), colnames= )
@@ -266,7 +271,7 @@ The p-values for model 1 and 2 are greater than an alpha of 0.01. Thus we fail t
 ####  Errors vs Fitted Values
 ```{r, echo = FALSE}
 plot_err_vs_fit = function(M,y){
-plot(M$fitted.values, M$residuals, main = sprintf("Errors vs.Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors")
+plot(M$fitted.values, M$residuals, main = sprintf("Errors vs. Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors")
 abline(h = 0,col = "purple")
 }
 par(mfrow = c(2,2))
@@ -350,7 +355,7 @@ $$ ln(Y_{1988}) = -0.3367+ 0.0190X_{region, other} + 0.1032X_{region, south} - 0
 **(ii)** Model 3: $\hat{\beta_{3}}$ Souhtern states had  11087 more alcohol fatalities on average compared to  north eastern states, holding all other variables constant. In other words,
 
 
-### Fixed Regression Models for State Laws
+## Fixed Regression Models for State Laws
 
 To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States.
 
@@ -443,9 +448,107 @@ summary(pan.north)
 coeftest(pan.north, vcov = vcovHC, type = "HC1")
 
 ```
+
+## Alcohol Consumption
+
+In addition to examining how laws impact the alcohol-related fatality rate, we will see if alcohol consumption has any affect on this statistic.
+The Fatalities dataset gives us access to spirit consumption per state and also beer taxes, which we will use as a proxy for beer consumption.
+By using beer taxes as a proxy for beer consumption, we assume that higher beer taxes lead to less consumption (negative correlation).
+Note that we will need to validate this assumption in order for any dependent results to be conclusive.
+
+For these variables, we have two hypotheses about the variables' affects on one another:
+
+  1. Beer taxes will have a *positive relationship* with spirit consumption; As taxes on beer go up one becomes deterred from purchasing beer, and their likelyhood of alternatively choosing spirits goes up.
+  2. Fatality rate has a *negative relationship* with beer taxes.
+
+We plan on using a two-way linear model, so we will first look at the pair plots of our observations and outcome:
+
+```{r, echo=FALSE}
+Fatalities$afatalper10k <- (Fatalities$afatal / Fatalities$pop) * 10000
+Fatalities$afatalper100kmiles <- (Fatalities$afatal / Fatalities$milestot) * 100000
+Fatalities <- Fatalities[c("year", "state", "spirits", "beertax", "afatalper10k")]
+avg_fatalities <- aggregate(.~state, Fatalities[c("state", "spirits", "beertax", "afatalper10k")], mean)
+# head(avg_fatalities)
+ggpairs(
+  avg_fatalities[c("spirits", "beertax", "afatalper10k")],
+  title="Alcohol Consumption Pair Plot",
+  columnLabels=c("Spirit Consumption", "Beer Taxes", "Fatalities Per 10k Citizens")
+)
+```
+
+At first glance, spirit consumption does not appear to have any correlation with beer taxes.
+More notably, there is a positive correlation between beer taxes and fatalities, the opposite of what we hypothesized.
+We can confirm these observations in our models.
+
+For our models we will be testing an interaction term to see if it makes any difference in the outcome.
+The notation for our two models are as follows:
+
+```{r, echo=FALSE}
+full_model <- lm(afatalper10k ~ beertax + spirits + beertax * spirits, avg_fatalities)
+reduced_model <- lm(afatalper10k ~ beertax + spirits, avg_fatalities)
+as.data.frame(summary(full_model)$coefficients)
+as.data.frame(summary(reduced_model)$coefficients)
+# Use reduced model
+```
+
+```{r, echo=FALSE}
+plot_qq(reduced_model, "Reduced Model")
+plot_err_vs_fit(reduced_model, "Reduced Model")
+```
+
+```{r}
+check.normality.assumptions(reduced_model)$`p-value`
+```
+
+```{r}
+bptest(reduced_model)$p.value
+```
+
+```{r}
+# Try examining YoY changes
+Fatalities$year <- as.Date(ISOdate(Fatalities$year, 12, 31))  # Convert year column to date type
+# head(Fatalities)
+by_state <- split(Fatalities, Fatalities$state)
+
+Fatalities_diff <- by_state[[1]][0,]  # Empty DF
+Fatalities_diff$state <- as.factor(NULL)
+
+for (state_data in by_state) {
+    zoo_state_data <- zoo(state_data[,-1:-2], order.by=state_data[,1])
+    diff_df <- as.data.frame(diff(zoo_state_data))
+    diff_df$state <- state_data$state[-1]
+    diff_df$year <- state_data$year[-1]
+    Fatalities_diff <- rbind(Fatalities_diff, diff_df)
+}
+
+Fatalities_diff <- Fatalities_diff[,c(5, 4, 1, 2, 3)]
+# head(Fatalities_diff, 20)
+ggpairs(
+  Fatalities_diff[c("spirits", "beertax", "afatalper10k")],
+  title="Year-Over-Year Alcohol Consumption Differences",
+  columnLabels=c("Spirit Consumption", "Beer Taxes", "Fatalities Per 10k Citizens")
+)
+
+# Model for all states
+# summary(lm(afatalper10k ~ beertax + state, Fatalities_diff))
+```
+
+```{r}
+beertax_plm <- plm(
+    afatalper10k ~ beertax + state + year,
+    index=c("state", "year"),
+    model="within",
+    effect="twoways",
+    data=Fatalities_diff
+)
+
+summary(beertax_plm)
+coeftest(beertax_plm, vcov=vcovHC, type="HC1")
+```
+
 # Sensitivity analysis
 
-#Causal Inference
+# Causal Inference
 
 # Discussion
 

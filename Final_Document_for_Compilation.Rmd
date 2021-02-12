@@ -1,7 +1,7 @@
 ---
 title: "Relationship between state prevention and penalization strategies and alcohol-related traffic fatalities in the United States"
 author: "Team 3; Group 1; Ana Boeriu, Christina De Cesaris, Mary-Francis LaPorte, Cameron Shinn"
-date: "02/09/2021"
+date: "02/12/2021"
 output:
   html_document:
     df_print: paged
@@ -32,17 +32,11 @@ data(Fatalities)
 
 # Abstract
 
-Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some
+Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and are considered a public health crisis by some
 (Perrine et al., 1989). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents
-(Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates. Drinking age and state were both significantly correlated to alcohol-related traffic fatalities, suggesting that other state laws play a role in observed trends. We found these predictor variables to be the most important for the years 1982, 1985, 1988:
+(Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol-related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates. Drinking age and state were both significantly correlated to alcohol-related traffic fatalities, suggesting that other state laws play a role in observed trends. We found these predictor variables to be the most important for the years 1982, 1985, 1988:
 region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits.
-The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
-
-  - *Beertax (Camron)*
-
-
-
-
+To determine the net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant. The relationship varied across states. Beer tax does not have a causal relationship with alcohol-related fatalities. The results of this report could inform policy makers.
 
 # Introduction
 

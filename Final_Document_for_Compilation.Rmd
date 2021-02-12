@@ -266,7 +266,7 @@ $Ei$ represents the binary dummy variable which accounts for the fixed effect of
 There are T-1 dummy variables for years
 $Dt$ represents the binary dummy variable which accounts for the fixed effect of year $t$ with its respective coefficient $\delta_t$.
 
-Notice how the dummy variables $ \gamma_1 E1$ and $ \delta_1 D1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $ \gamma_1 E_1$ is represented when $ \gamma_2 E2= \cdots =\gamma_n EN=0$
+Notice how the dummy variables $\gamma_1 E1$ and $\delta_1 D1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $\gamma_1 E_1$ is represented when $\gamma_2 E2= \cdots =\gamma_n EN=0$
 
 $u_{it}$ represents the error terms and $\beta_1 X_{k,it}$ represents the $kth$ predictor.
 

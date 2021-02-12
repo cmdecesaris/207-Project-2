@@ -32,15 +32,7 @@ data(Fatalities)
 
 Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some 
 (Perrine et al., 1989). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents 
-(Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates.  WHAT METHODS WE USED (1 SENTENCE).
-
-  - *Drinking age study (Mary) *
-
-  - *Most influential effects study (Ana) *
-We found these predictor variables to be the most important for the years 1982, 1985, 1988:
-region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits.   
-
-The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
+(Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates. Drinking age and State are both significantly correlated to the number of alcohol-related traffic fatalities, suggesting that other state laws are significant, policy-relevant, indicators. We found these predictor variables to be the most important for the years 1982, 1985, 1988: region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits. The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
 
   - *Beertax (Camron)*
 

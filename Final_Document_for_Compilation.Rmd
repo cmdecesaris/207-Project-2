@@ -385,11 +385,11 @@ $$ ln(Y_{1988}) = -0.3367+ 0.0190X_{region, other} + 0.1032X_{region, south} - 0
 To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States.
 
 
-In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty. The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. 
+In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty. The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported.
 
 In many ways, this is wishful thinking, as there are factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
 
-The following graphs illustrate this point. In most all cases, once a state implemented a breath test or penalty law, it did not revoke it in the years which followed. The state fatality rates were graphed for the starting year 1982 and ending year 1988. The points were color and shape coded to indicate year and whether a breath test or penalty law was in place. There is no clear pattern on whether either of these laws had any effect when we compare to other states. It is more reasonable to suggest the effect will be different due to state differences. That is, there is no simply way to determine the net effect of either law on fatality rates between even neighboring states. 
+The following graphs illustrate this point. In most all cases, once a state implemented a breath test or penalty law, it did not revoke it in the years which followed. The state fatality rates were graphed for the starting year 1982 and ending year 1988. The points were color and shape coded to indicate year and whether a breath test or penalty law was in place. There is no clear pattern on whether either of these laws had any effect when we compare to other states. It is more reasonable to suggest the effect will be different due to state differences. That is, there is no simply way to determine the net effect of either law on fatality rates between even neighboring states.
 
 
 ```{r, echo = FALSE, include=FALSE, results="hide"}
@@ -490,7 +490,7 @@ For the fixed effects model, the following assumptions are made:
 
 
  Below we calculate the cluster standard errors to test the significance of our estimates at level $\alpha=0.05$. The usage of cluster standard errors is to adjusts for serial correlation and heteroskedasticity which can invalidate standard error calculations in fixed effect regression models.
- 
+
  The results of a fixed linear regression model on all states shows no significant effect of BreathTests or Penalty laws on drunk driving. However, as noted prior, it is unlikely that even a panel model on all fifty-states can correctly adjust for the unobsrved differences between each state and year.
 
 ```{r echo=TRUE}
@@ -519,7 +519,7 @@ data = southa)
 coeftest(pan.south, vcov = vcovHC, type = "HC1")
 ```
 
-When using northern states there appears to be a significant negative net effect of both BreathTest and Penalities on fatality rates. It is possible the effect appears in this model because in general northern states have less land area than southern states, so the odds of encountering a police officer who will enforce these laws is greater.  
+When using northern states there appears to be a significant negative net effect of both BreathTest and Penalities on fatality rates. It is possible the effect appears in this model because in general northern states have less land area than southern states, so the odds of encountering a police officer who will enforce these laws is greater.
 
 ```{r echo=TRUE, results="hide"}
 
@@ -538,7 +538,7 @@ coeftest(pan.north, vcov = vcovHC, type = "HC1")
 
 
 Diagnostic plots for each of the three laws models indicates the residuals are independently distributed with no clear pattern to indicate non-linearity.
-The Q-Q chart indicate the error terms are normally distributed $N(0,\sigma^2)$ for each of the models with light tails. 
+The Q-Q chart indicate the error terms are normally distributed $N(0,\sigma^2)$ for each of the models with light tails.
 
 ```{r Diagnostics,echo = FALSE }
 fit_vals <- function(mod) {
@@ -579,7 +579,7 @@ mtext("Diagnostic Plots North Eastern States", outer = TRUE, cex = 1.5)
 
 ```
 
-## Alcohol Consumption
+## Beer Taxes and Alcohol Consumption
 
 In addition to examining how laws impact the alcohol-related fatality rate, we will see if alcohol consumption has any affect on this statistic.
 The Fatalities dataset gives us access to spirit consumption per state and also beer taxes, which we will use as a proxy for beer consumption.
@@ -650,7 +650,7 @@ This observation contradicts the logic we used in our hypothesis so we will look
 
 ### Diagnostics
 
-Plotting the diagnostic measures for our
+Plotting the diagnostic measures to see if there is normality in our residuals and the variance in our error terms is constant:
 
 ```{r, echo=FALSE}
 par(mfrow = c(1,2))
@@ -658,19 +658,27 @@ plot_qq(reduced_model,"Red. Model")
 plot_err_vs_fit(reduced_model,"Red. Model")
 ```
 
-#### Test for Normality
+Notably our QQ plot has a heavy tail, and we will validate that in the next section.
+
+#### Test for Normality (Shapiro Wilks Test)
+
+$H_0$: Error terms are normal, $H_A$: Error terms are not normal
+
 ```{r, echo = FALSE}
-check.normality.assumptions(reduced_model)$`p-value`
+ppp <- check.normality.assumptions(reduced_model)$`p-value`
 ```
 
-#### Test for Constant Variance
-```{r, echo = FALSE}
-bptest(reduced_model)$p.value
-```
+Our p-value for the Shapiro Wilks test is `r round(ppp, digits=3)` so fail to reject the null hypthesis at an $\alpha$ of 0.01 and conclude that the errors are normally distributed.
+
+#### Test for Constant Variance (Breusch-Pagan Test)
+
+$H_0$: Residuals have equal variance, $H_A$: Residuals do not have equal variance
+
+Our p-value for the Breusch-Pagan test is `r round(bptest(reduced_model)$p.value, digits=2)` so we fail to reject the null hypothesis at an $\alpha$ of 0.01 and conclude that our model residuals have equal variance.
 
 ### Addressing Concerns
 
-Although our intiail model identified a relationship between beer taxes and alcohol-related fatality numbers, it is not what we expected.
+Although our intitial model identified a relationship between beer taxes and alcohol-related fatality numbers, it is not what we expected.
 The positive relationship between these two variables seems counterintuitive at first; If beer costs more to buy, wouldn't that deter consumption and thus lead to fewer associated traffic fatalities?
 This initial assumption we made does not appear to hold based on these results.
 
@@ -714,8 +722,15 @@ ggpairs(
 # summary(lm(afatalper10k ~ beertax + state, Fatalities_diff))
 ```
 
-Looking at these pair plots, it appears that there isn't much correlation between any of our variables.
-To quantify this, we will use
+Looking at these pair plots, it appears that there isn't much of a relationship between any of our variables.
+To quantify this, we will use a fixed effects linear model, the same as in the "Fixed Regression Models for State Laws" section.
+We will be keeping the year and state effects fixed to dismiss any differences unrelated to our parameters:
+
+$$Y_{ij} = \beta_0 + \beta_1 X_{beertax} + \epsilon_{ij}$$
+
+Where $Y$ is the YoY difference in number of alcohol-related fatalities per 10k citizens, $\beta_0$ is the fixed effects for year and state, $\beta_1$ is the YoY difference in beer taxes and $\epsilon$ is our error term.
+
+where $t=1,...,T$ represents the year (time) and $i=1,...,n$ represents the collection of instances for each state $i$ (entity).
 
 ```{r,echo = FALSE}
 beertax_plm <- plm(

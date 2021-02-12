@@ -20,6 +20,7 @@ library(lme4)
 library(car)
 library(DT)
 library(AER)
+library(plm)
 data(Fatalities)
 ```
 

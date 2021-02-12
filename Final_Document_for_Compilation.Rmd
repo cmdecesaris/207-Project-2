@@ -12,6 +12,13 @@ knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
 ```{r,echo = FALSE}
+library(tidyverse)
+library(dplyr)
+library(AER)
+library(agricolae)
+library(lme4)
+library(car)
+library(DT)
 library(AER)
 data(Fatalities)
 ```

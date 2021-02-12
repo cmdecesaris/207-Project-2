@@ -49,10 +49,12 @@ The rate of alcohol-related drinking fatalities fluctuated by state over the 7 y
 
 ![](full_us.gif)
 
-Preliminary analysis suggests that law-changes were similar between the southeastern-to-southcentral region and the northeaster-to-midatlantic region.
+Preliminary analysis suggests that law-changes were similar between the southeastern-to-southcentral region and the northeastern-to-midatlantic region.
 
 <img src="south.gif" width="450"/>
 <img src="northeast.gif" width="450"/>
+
+
 
 ## Drinking Age
 Based on the literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities. Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
@@ -77,6 +79,8 @@ night_legal <- Fatalities$fatal2124
 
 a_rate <-  (Fatalities$afatal/Fatalities$pop)*10000
 Fatalities <- cbind(Fatalities,a_rate)
+af=as.data.frame(Fatalities)#Christina's data
+
 ```
 
 ```{r, echo = FALSE}
@@ -345,15 +349,11 @@ $$ ln(Y_{1988}) = -0.3367+ 0.0190X_{region, other} + 0.1032X_{region, south} - 0
 **(ii)** Model 3: $\hat{\beta_{3}}$ Souhtern states had  11087 more alcohol fatalities on average compared to  north eastern states, holding all other variables constant. In other words,
 
 
-### Fixed Regression Models for effectiveness of State Laws
+### Fixed Regression Models for State Laws
 
 To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States.
 
-Southern: Louisiana, Mississippi, Alabama, Georgia, South Carolina,North Carolina, Arkansas, Texas, Florida, Tennessee, Oklahoma, Kentucky, West Virginia, and Virginia.
 
-***INSERT MAP?***
-
-North Eastern: Maine, Vermont, New Hampshire, Massachusetts, New York, Rhode Island, New Jersey, Delaware Maryland, Pennsylvania.
 In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty.
 
 The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. In many ways, this is wishful thinking, as there are likely factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
@@ -386,6 +386,67 @@ For the fixed effects model, the following assumptions are made:
  $\hat{FatalityRate}_{region} = \beta_1 * Penalty + \beta_2 * BreathTest + StateEffects + TimeEffects$
 
  In this form of the model the intercept $\beta_0$ is incorporated with in $StateEffects + TimeEffects$.
+
+```{r}
+ data(Fatalities)
+af=data.frame(Fatalities)
+af$rate=(af$afatal/af$pop)*10000
+
+af$penalty <- with(af, factor(jail == "yes" | service == "yes",
+labels = c("no", "yes")))
+
+southa= af%>%dplyr::filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ok","ky","wv","va"))
+
+
+n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
+```
+
+
+```{r}
+pan.total <- plm(log(rate
+) ~ penalty +breath+ state + year,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = af)
+
+summary(pan.total)
+coeftest(pan.total, vcov = vcovHC, type = "HC1")
+
+```
+
+```{r}
+
+pan.south <- plm(log(rate
+) ~penalty+breath+ state + year,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = southa)
+
+summary(pan.south)
+coeftest(pan.south, vcov = vcovHC, type = "HC1")
+```
+```{r}
+
+pan.north <- plm(log(rate
+) ~ state + year+beertax,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = n_easta)
+
+summary(pan.north)
+
+
+coeftest(pan.north, vcov = vcovHC, type = "HC1")
+
+```
+
+
+
+
+
 
 
 # Sensitivity analysis

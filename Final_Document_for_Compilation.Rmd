@@ -497,8 +497,7 @@ fit_vals <- function(mod) {
    return (as.numeric(mod$model[[1]] - mod$residuals) )
 }
 
-par(mfrow=c(2,2))
-
+par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
 plot(fit_vals(pan.total), pan.total$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
 abline(lm(pan.total$res~fit_vals(pan.total)), col="red") 
 
@@ -508,8 +507,7 @@ mtext("Diagnostic Plots All States", outer = TRUE, cex = 1.5)
 
 ```
 ```{r}
-par(mfrow=c(2,2))
-
+par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
 plot(fit_vals(pan.south), pan.south$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
 abline(lm(pan.south$res~fit_vals(pan.south)), col="red") 
 

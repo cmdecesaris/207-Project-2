@@ -88,7 +88,7 @@ af=as.data.frame(Fatalities)#Christina's data
 hist(drinking_age)
 ```
 
-```{r, echo = FALSE, results = "hide"}
+```{r, echo = FALSE, results = "hide", warning=FALSE}
 library(dplyr)
 par(mfrow=c(2,2))
 plot(drinking_age,alcohol_fat)

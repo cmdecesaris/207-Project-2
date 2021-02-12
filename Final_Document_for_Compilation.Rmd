@@ -191,7 +191,7 @@ stat <- data.frame(Variable, FValue, PValue)
 datatable(stat,class = 'cell-border stripe',
  caption = htmltools::tags$caption(
     style = 'caption-side: top; text-align: center;',
-    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Northern Region')),options = list(sDom  = 't'), colnames= )
+    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Northern Region')), colnames= )
 
 anova_fat_state_n_nointeract <- aov(afatal~as.factor(drinkage)+as.factor(state), data = n_east)
 #summary(anova_fat_state_n_nointeract)
@@ -200,8 +200,6 @@ anova_fat_state_n_nointeract <- aov(afatal~as.factor(drinkage)+as.factor(state),
 
 ## Inferential analysis
 
-
-### Best Model Fit
 ```{r, echo = FALSE, message=FALSE, results = 'hide'}
 library(ggplot2)
 library(viridis)
@@ -232,13 +230,13 @@ fatality.1985$year = NULL
 fatality.1988 = subset(Fatalities, year == "1988")
 fatality.1988$year = NULL
 ```
-###  Model Selection\
+##  Model Selection\
 In this section we are using stepwise regression for all subsets and a specific subset selection process to see which combination of explanatory variables will produce the best model based off of the criteria we have chosen to use which is BIC. There are many variables in our model and we must make sure the ones in our model are significant. We looked at the model chosen when using all subsets and then Forwards Backwards Selection.
 
-###  Model Criteria\
+##  Model Criteria\
 Because our goal is to have a correct model, we are choosing only explanatory variables    which have a significant relationship with angina. This model may be smaller than ones which have the goal of prediction. For the purposes of this class AIC or BIC are often used as model selection criteria as they penalize large models. AIC may overfit correct models and BIC penalizes large models even more, so we chose to focus on BIC as we imagine if somebody is trying to see if a person has angina  they will really need the  result to be as correct as possible. We choose the model that lowers BIC the most.
 
-### Subset Selection\
+## Subset Selection\
 Subset selection does not evaluate all possible models; however, it is faster and does not cost as much because not all subsets are calculated. We chose to use Forwards Backwards Selection because we want a correct model which means having a smaller one. Of course, underfitting a model is not ideal however between underfitting and overfitting, underfitting the model is more likely to achieve the smaller and often more correct model which Forwards Selection or Forwards Backwards Selection is more likely to do. Forwards Backwards Selection does not underfit as much as Forwards Selection though, so we used Forwards Backwards as our subset selection. These were the models with the lowest BIC when looking at all possible models.
 ```{r, results = "hide",include=FALSE}
 #used get best model fun from model_selection.R file
@@ -256,7 +254,7 @@ Model 2: $$ Y_{1985} =  0.56308 - 0.0094X_{region, other} + 0.0781X_{region, sou
 Model 3: $$ Y_{1988} =  1.35883 - 0.01927X_{region, other} - 0.15759X_{region, south} - 0.00005X_{income} + 0.01255 X_{baptist}$$
 
 
-### Diagnostics
+## Diagnostics
 With our “best” models of no interaction effects, we will perform diagnostics to ensure that it meets the assumptions of multiple regression, which are that observations are independent, errors have constant variance and they are normally distributed. We will look at different tests for these assumptions, and find and remove outliers. If necessary. we will transform data to correct for non-normality, non-linearity, or non-constant variance
 
 ### Testing for Normality
@@ -273,7 +271,7 @@ plot_qq(best.model.1988, "Model 3")
 
 This data does not seem to be normally distributed as there are heavy tails on all three models. There are outliers and the points towards the end of the line are not where the points would lie if the data was totally normally distributed.
 
-#### Shapiro Wilks Test
+### Shapiro Wilks Test
 ```{r, results = "hide",include=FALSE}
 check.normality.assumptions = function(M){
   #qqnorm(M$residuals)

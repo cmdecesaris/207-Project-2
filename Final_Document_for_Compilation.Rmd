@@ -724,7 +724,8 @@ We will be keeping the year and state effects fixed to dismiss any differences u
 
 $$Y_{ij} = \beta_0 + \beta_1 X_{beertax} + \epsilon_{ij}$$
 
-Where $Y$ is the YoY difference in number of alcohol-related fatalities per 10k citizens, $\beta_0$ is the fixed effects for year and state, $\beta_1$ is the effect of YoY difference in beer taxes, $X_1$ is the YoY difference in beer taxes and $\epsilon$ is our error term.
+Where $Y$ is the YoY difference in number of alcohol-related fatalities per 10k citizens, $\beta_0$ is the fixed effects for year and state, $\beta_1$ is the effect of YoY difference in beer taxes, $X_1$ is the YoY difference in beer taxes and $\epsilon$ is our error term, i.i.d. $N(0, \sigma_2)$.
+$i = 1,...,n$ where $n$ is the number of states and $j = 1,...,m$ where $m$ is the number of YoY changes (one less than the number of years).
 
 ```{r,echo = FALSE}
 beertax_plm <- plm(
@@ -738,7 +739,7 @@ beertax_plm <- plm(
 # summary(beertax_plm)$coefficients
 ```
 
-Testing our beertax coefficient $\hat{\beta_1}$ we can see a p-value of `r round(coeftest(beertax_plm, vcov=vcovHC, type="HC1")[1,4], digits=2)` so we can say that *there is a non-causal relationship between beer taxes and alcohol related traffic fatalities*.
+Testing our beertax coefficient $\hat{\beta_1}$ we can see a p-value of `r round(coeftest(beertax_plm, vcov=vcovHC, type="HC1")[1,4], digits=2)` so we can say that **there is a non-causal relationship between beer taxes and alcohol related traffic fatalities**.
 This lines up with other findings (Mast, B., Benson, B., & Rasmussen, D.) based on this dataset, keeping our conclusion consistent.
 
 # Causal Inference

@@ -74,8 +74,7 @@ Preliminary analysis suggests that law-changes were similar between the southeas
 </center>
 
 ## Drinking Age
-Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities
-(Lovenheim & Slemrod, 2010). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study. Diagnostics confirm that distribution of drinking age is not normal. Additionally, there is an outlier will undue pull (Louisiana in 1988).
+Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities (Lovenheim & Slemrod, 2010). Preliminary data exploration shows that by far, the most common drinking age is 21, which is significantly related to the rate of alcohol-related traffic fatalities (see table below). State, however, also appears to be significant. This suggests that other state laws are significantly affecting drunk driving. Since the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study. Diagnostics confirm that distribution of drinking age is not normal. Additionally, there is an outlier with undue leverage (Louisiana in 1988).
 
 The notation for the test performed (two-way ANOVA) to determine significance of drinking age and state is as follows:
 
@@ -104,7 +103,6 @@ af=as.data.frame(Fatalities)#Christina's data
 ```{r, echo = FALSE}
 hist(drinking_age, main = "Histogram of Legal Dinking Age", xlab = "Legal Drinking Age")
 ```
-### add titles and axes lables to graphs?
 
 ```{r, echo = FALSE, results = "hide", warning=FALSE}
 library(dplyr)
@@ -192,8 +190,6 @@ anova_fat_state_n_nointeract <- aov(afatal~as.factor(drinkage)+as.factor(state),
 
 ```
 
-## Inferential analysis
-
 ```{r, echo = FALSE, message=FALSE, results = 'hide'}
 library(ggplot2)
 library(viridis)
@@ -224,10 +220,9 @@ fatality.1985$year = NULL
 fatality.1988 = subset(Fatalities, year == "1988")
 fatality.1988$year = NULL
 ```
-##  Model Selection\
+##  Model Selection and Criteria\
 In this section we are using stepwise regression for all subsets and a specific subset selection process to see which combination of explanatory variables will produce the best model based off of the criteria we have chosen to use which is BIC. There are many variables in our model and we must make sure the ones in our model are significant. We looked at the model chosen when using all subsets and then Forwards Backwards Selection.
 
-##  Model Criteria\
 Because our goal is to have a correct model, we are choosing only explanatory variables    which have a significant relationship with angina. This model may be smaller than ones which have the goal of prediction. For the purposes of this class AIC or BIC are often used as model selection criteria as they penalize large models. AIC may overfit correct models and BIC penalizes large models even more, so we chose to focus on BIC as we imagine if somebody is trying to see if a person has angina  they will really need the  result to be as correct as possible. We choose the model that lowers BIC the most.
 
 ## Subset Selection\

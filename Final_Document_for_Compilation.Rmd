@@ -13,43 +13,42 @@ knitr::opts_chunk$set(fig.pos = 'H')
 
 ***
 
-# Abstract 
+# Abstract
 
 Alcohol-related traffic fatalities are a serious issue in the United States, considered a public health crisis by some (Perrine, Peck, Fell). Studies have shown that the decisions of policy makers to implement laws to protect their citizens from alcohol-related traffic accidents have correlated with improvement in such accidents (Lovenheim, Slemrod; Mast, Benson, Rasmussen). This study assesses the relationship between various state laws, including alcohol tax, legal drinking age, and punishments for driving-wile-intoxicated, on alcohol fatality rates. WHAT METHODS WE USED (1 SENTENCE). WHAT WERE THE RESULTS (2 SENTENCES).
 
 # Introduction
 
-Traffic fatalities related to alcohol consumption is a big problem in the United States. Over 10,000 people died from crashes due to driving while intoxicated in 2018, comprising nearly 30% of traffic fatalities that year. Some have likened the impact of these deaths to a public health, or epidemiological, problem given the complex social and cultural circumstances that surround this problem.  (https://www.nhtsa.gov/risky-driving/drunk-driving cite this last two sentences). Public representatives have implemented several different types of laws to help combat this problem. These laws can be broadly defined as "decreasing opportunity", or "preventing recidivism". In other words, these laws either: 1) make it less convenient (and theoretically, less probable) that one individual would drive drunk, or 2) make the penalty so large for a first offense that a previous offender will correct their behavior the next time. Successful deterrence of driving-while-intoxicated has the potential to save the lives of many citizens. 
+Traffic fatalities related to alcohol consumption is a big problem in the United States. Over 10,000 people died from crashes due to driving while intoxicated in 2018, comprising nearly 30% of traffic fatalities that year. Some have likened the impact of these deaths to a public health, or epidemiological, problem given the complex social and cultural circumstances that surround this problem.  (https://www.nhtsa.gov/risky-driving/drunk-driving cite this last two sentences). Public representatives have implemented several different types of laws to help combat this problem. These laws can be broadly defined as "decreasing opportunity", or "preventing recidivism". In other words, these laws either: 1) make it less convenient (and theoretically, less probable) that one individual would drive drunk, or 2) make the penalty so large for a first offense that a previous offender will correct their behavior the next time. Successful deterrence of driving-while-intoxicated has the potential to save the lives of many citizens.
 
 In the 1980s, faced with the stark statistics, lawmakers implemented various laws related to, among other things, drinking age, beer tax and drunk driving penalties (cite). These laws were accumulated and described in a data set that will be discussed in greater detail later in this report. (cite our data set) The goal of this report is to study the efficacy of these law changes, across the United States, and over the course of the 1980s. In particular:
 - Are any law change (particularly beer tax, penalization for drunk driving, or drinking age) correlated with the improvement in alcohol-related traffic fatalities per capita?
 - Which combination of drunk-driving related variables in the data set best predict the rate of alcohol-related traffic fatalities?
 - Is it possible to imply causality between these changes and the decrease or increase of alcohol-related traffic fatalities?
 
-Based on previous literature, we hypothesize that lower alcohol-related traffic fatality rates will be correlated to a higher drinking age, higher beer tax, and more-stringent sentancing for drunk driving offenses. (cite ALSO ADD?) Better understanding the answers to these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities. 
- 
-# Background 
+Based on previous literature, we hypothesize that lower alcohol-related traffic fatality rates will be correlated to a higher drinking age, higher beer tax, and more-stringent sentancing for drunk driving offenses. (cite ALSO ADD?) Better understanding the answers to these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
+
+# Background
 
 The source of data used in this experiment is from a study conducted *then* by *them* to look at alcohol-related laws and their impact on drunk driving. This set is available through AER as the "Fatalities" data set. The target population of the original study was all 50 states in the USA, during the 1980s. The population is reported from each state, along with statistics including total traffic fatalities, alcohol-related traffic fatalities, and subsets of those variables separated by age. The "sampling" mechanism was reported accidents and fatalities available in the public domain. While some accidents (minor, on private property, or no injuries for instance) may not have been reported, it is relatively safe to presume that all instance were reported. Totals (for counts) or means (for values) associated with each variable were aggregated on a yearly basis by state. The variables used in this study include:FILL IN ONCE WE KNOW.
 
-# Descriptive analysis 
+# Descriptive analysis
 
 The rate of alcohol-related drinking fatalities fluctuated by state over the 7 years included in this study. It appears that alcohol related traffic fatalities decreases in most states over most year.
 
 ![](full_us.gif)
 
-Preliminary analysis suggests that law-changes were similar between the southeastern-to-southcentral region and the northeaster-to-midatlantic region. 
+Preliminary analysis suggests that law-changes were similar between the southeastern-to-southcentral region and the northeaster-to-midatlantic region.
 
-![](south.gif)
-
-![](northeast.gif)
+<img src="south.gif" width="450"/>
+<img src="northeast.gif" width="450"/>
 
 ## Drinking Age
 Based on the literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities. Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (p = ). State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
 
 **Insert table with the, like, 6 ANOVA results.
 
-## Inferential analysis 
+## Inferential analysis
 
 
 ### Best Model Fit
@@ -90,12 +89,12 @@ In this section we are using stepwise regression for all subsets and a specific 
 Because our goal is to have a correct model, we are choosing only explanatory variables    which have a significant relationship with angina. This model may be smaller than ones which have the goal of prediction. For the purposes of this class AIC or BIC are often used as model selection criteria as they penalize large models. AIC may overfit correct models and BIC penalizes large models even more, so we chose to focus on BIC as we imagine if somebody is trying to see if a person has angina  they will really need the  result to be as correct as possible. We choose the model that lowers BIC the most.
 
 ### Subset Selection\
-Subset selection does not evaluate all possible models; however, it is faster and does not cost as much because not all subsets are calculated. We chose to use Forwards Backwards Selection because we want a correct model which means having a smaller one. Of course, underfitting a model is not ideal however between underfitting and overfitting, underfitting the model is more likely to achieve the smaller and often more correct model which Forwards Selection or Forwards Backwards Selection is more likely to do. Forwards Backwards Selection does not underfit as much as Forwards Selection though, so we used Forwards Backwards as our subset selection. These were the models with the lowest BIC when looking at all possible models. 
+Subset selection does not evaluate all possible models; however, it is faster and does not cost as much because not all subsets are calculated. We chose to use Forwards Backwards Selection because we want a correct model which means having a smaller one. Of course, underfitting a model is not ideal however between underfitting and overfitting, underfitting the model is more likely to achieve the smaller and often more correct model which Forwards Selection or Forwards Backwards Selection is more likely to do. Forwards Backwards Selection does not underfit as much as Forwards Selection though, so we used Forwards Backwards as our subset selection. These were the models with the lowest BIC when looking at all possible models.
 ```{r, results = "hide",include=FALSE}
 #used get best model fun from model_selection.R file
-best.model.1982 = lm(formula = afatal_rate ~ location + miles + dry + jail + spirits, 
+best.model.1982 = lm(formula = afatal_rate ~ location + miles + dry + jail + spirits,
     data = fatality.1982)
-best.model.1985 = lm(formula = afatal_rate ~ location + income + miles + jail, 
+best.model.1985 = lm(formula = afatal_rate ~ location + income + miles + jail,
     data = fatality.1985)
 best.model.1988 = lm(formula = afatal_rate ~ location + income + baptist, data = fatality.1988)
 ```
@@ -108,7 +107,7 @@ Model 3: $$ Y_{1988} =  1.35883 - 0.01927X_{region, other} - 0.15759X_{region, s
 
 
 ### Diagnostics
-With our “best” models of no interaction effects, we will perform diagnostics to ensure that it meets the assumptions of multiple regression, which are that observations are independent, errors have constant variance and they are normally distributed. We will look at different tests for these assumptions, and find and remove outliers. If necessary. we will transform data to correct for non-normality, non-linearity, or non-constant variance  
+With our “best” models of no interaction effects, we will perform diagnostics to ensure that it meets the assumptions of multiple regression, which are that observations are independent, errors have constant variance and they are normally distributed. We will look at different tests for these assumptions, and find and remove outliers. If necessary. we will transform data to correct for non-normality, non-linearity, or non-constant variance
 
 ### Testing for Normality
 ####  QQ Plot
@@ -124,7 +123,7 @@ plot_qq(best.model.1988, "Model 3")
 ```
 
 
-This data does not seem to be normally distributed as there are heavy tails on all three models. There are outliers and the points towards the end of the line are not where the points would lie if the data was totally normally distributed. 
+This data does not seem to be normally distributed as there are heavy tails on all three models. There are outliers and the points towards the end of the line are not where the points would lie if the data was totally normally distributed.
 
 #### Shapiro Wilks Test
 ```{r, results = "hide",include=FALSE}
@@ -137,7 +136,7 @@ check.normality.assumptions = function(M){
     bc = boxcox(M,plotit = FALSE)
     lambda = bc$x[which.max(bc$y)]
     lambda #To see the value of lambda, transform to ln(y)
- 
+
   results = list("p-value" = pValue, "lambda" = lambda)
   return(results)
   }
@@ -149,16 +148,16 @@ check.normality.assumptions(best.model.1988)
 
 
 $H_{o}:$ errors is  normal   $H_{A}:$ errors is non- normal
-  
+
    $P-Value_{model\ 1}:  0.2426$     $P-Value_{model\ 2}:  0.02156$     $P-Value_{model\ 3}:  0.0024$
-  
+
 The p-values for model 1 and 2 are greater than an alpha of 0.01. Thus we fail to reject the null and conclude that the errors are normally distributed. However, for model 3 the p-value is less than any significant alpha of 0.01, 0.1 and 0.05 thus we reject the null and conclude that the errors are not normally distributed.
 
 ### Testing for constant variance
 ####  Errors vs Fitted Values
 ```{r, echo = FALSE}
 plot_err_vs_fit = function(M,y){
-plot(M$fitted.values, M$residuals, main = sprintf("Errors vs.Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors") 
+plot(M$fitted.values, M$residuals, main = sprintf("Errors vs.Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors")
 abline(h = 0,col = "purple")
 }
 par(mfrow = c(2,2))
@@ -178,13 +177,13 @@ bptest(best.model.1988)
 ```
 
 $H_{o}:$ Residuals have equal variance   $H_{A}:$ Residuals do not have equal variance
- 
+
    $P-Value_{model\ 1}$: 0.6729    $P-Value_{model\ 2}$: 0.1003      $P-Value_{model\ 2}$: 0.03305
 
-All the models have a p-value greater than an alpha of 0.01 thus we fail to reeject the null and conclude that all the models have constant variance. 
+All the models have a p-value greater than an alpha of 0.01 thus we fail to reeject the null and conclude that all the models have constant variance.
 
 ### Transformations for Model 3
-In this section we wll transform the data of Model 3 to try to correct for non-normality in the errors using the Box-Cox transformation. Box-Cox transformations uses $(Y^\lambda−1)/\lambda$ to find the lambda that maximizes log-likelihood. We found that the lambda that maximizes the log- likelihood has a value o zero which corresponds to a log transformation. Once we transform the data, we will re-fit model 3.  We chose to use the transformed data for Model 3  because that one made the data most linear, most normal, and has the most constant variance compared to no transformation. Our next step was to look for and remove any outliers so that we could further meet the assumptions of linear regression. We did find 2 outliers in model 2 and two outliers in Model 3, when using an alpha of 0.05. We also checked for leverage points, which are data points which have a large influence on the regression line. When using cook’s distance  there were no leverage points, and so in the end we concluded to not remove any data points because the outliers are not influencing the models. 
+In this section we wll transform the data of Model 3 to try to correct for non-normality in the errors using the Box-Cox transformation. Box-Cox transformations uses $(Y^\lambda−1)/\lambda$ to find the lambda that maximizes log-likelihood. We found that the lambda that maximizes the log- likelihood has a value o zero which corresponds to a log transformation. Once we transform the data, we will re-fit model 3.  We chose to use the transformed data for Model 3  because that one made the data most linear, most normal, and has the most constant variance compared to no transformation. Our next step was to look for and remove any outliers so that we could further meet the assumptions of linear regression. We did find 2 outliers in model 2 and two outliers in Model 3, when using an alpha of 0.05. We also checked for leverage points, which are data points which have a large influence on the regression line. When using cook’s distance  there were no leverage points, and so in the end we concluded to not remove any data points because the outliers are not influencing the models.
 
 ```{r,  echo=FALSE}
 transformData = function(data){
@@ -201,7 +200,7 @@ bptest(new.best.model.1988)
 outliers = function(Model, data){
   ri = rstandard(Model)
   alpha = 0.1
-  n = nrow(data) 
+  n = nrow(data)
   p = length(Model$coefficients)
   cutoff = qt(1-alpha/(2*n), n - p )
   outliers = which(abs(ri) > cutoff)
@@ -233,25 +232,25 @@ $$ Y_{1985} =  0.56308 - 0.0094X_{region, other} + 0.0781X_{region, south} - 0.0
 
 $$ ln(Y_{1988}) = -0.3367+ 0.0190X_{region, other} + 0.1032X_{region, south} - 0.0001X_{income} + 0.0001 X_{miles}$$
 
-### Interpretation and Analysis 
+### Interpretation and Analysis
 
 #### A. Models
 
 **(i)** Model 1: $\hat{\beta_{7}}:$ When spirit consumption increases by 1 bottle, the average number of alcohol fatalities increases by 1396 accidents holding all other variables constant
 
-**(ii)** Model 3: $\hat{\beta_{3}}$ Souhtern states had  11087 more alcohol fatalities on average compared to  north eastern states, holding all other variables constant. In other words,    
+**(ii)** Model 3: $\hat{\beta_{3}}$ Souhtern states had  11087 more alcohol fatalities on average compared to  north eastern states, holding all other variables constant. In other words,
 
 
 ### Fixed Regression Models for effectiveness of State Laws
 
-To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States. 
+To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first must subset our data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States.
 
-Southern: Louisiana, Mississippi, Alabama, Georgia, South Carolina,North Carolina, Arkansas, Texas, Florida, Tennessee, Oklahoma, Kentucky, West Virginia, and Virginia. 
+Southern: Louisiana, Mississippi, Alabama, Georgia, South Carolina,North Carolina, Arkansas, Texas, Florida, Tennessee, Oklahoma, Kentucky, West Virginia, and Virginia.
 
 ***INSERT MAP?***
 
-North Eastern: Maine, Vermont, New Hampshire, Massachusetts, New York, Rhode Island, New Jersey, Delaware Maryland, Pennsylvania. 
-In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty. 
+North Eastern: Maine, Vermont, New Hampshire, Massachusetts, New York, Rhode Island, New Jersey, Delaware Maryland, Pennsylvania.
+In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty.
 
 The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. In many ways, this is wishful thinking, as there are likely factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
 
@@ -259,7 +258,7 @@ Because not every state changed their laws over the time period, a linear regres
 
 $$Y_{it} = \beta_0 + \beta_1 X_{1,it} +\cdots+\beta_1 X_{k,it} + \gamma_2 E2 +\cdots + \gamma_n En + \delta_2 D2 + \cdots +  \delta_T DT + u_{it} .$$
 
-where $t=1,...,T$ represents the year (time) and $i=1,...,n$ represents the collection of instances for each state $i$ (entity). 
+where $t=1,...,T$ represents the year (time) and $i=1,...,n$ represents the collection of instances for each state $i$ (entity).
 
 There are n-1 dummy variables for states.
 $Ei$ represents the binary dummy variable which accounts for the fixed effect of state $i$ with its respective coefficient $\gamma_i$.
@@ -269,7 +268,7 @@ $Dt$ represents the binary dummy variable which accounts for the fixed effect of
 
 Notice how the dummy variables $ \gamma_1 E1$ and $ \delta_1 D1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $ \gamma_1 E_1$ is represented when $ \gamma_2 E2= \cdots =\gamma_n EN=0$
 
-$u_{it}$ represents the error terms and $\beta_1 X_{k,it}$ represents the $kth$ predictor. 
+$u_{it}$ represents the error terms and $\beta_1 X_{k,it}$ represents the $kth$ predictor.
 
 For the fixed effects model, the following assumptions are made:
 
@@ -277,33 +276,33 @@ For the fixed effects model, the following assumptions are made:
 - The regressor terms and errors for all $i=1,\cdots,n$ are $i.i.d.$ from their joint distribution.
 - There is no perfect multicollinearity
 - There are not significant outliers
- 
+
  A simpler, project specific version of the model using only BreathTest and Penalty for regressiors is:
- 
+
  $\hat{FatalityRate}_{region} = \beta_1 * Penalty + \beta_2 * BreathTest + StateEffects + TimeEffects$
- 
+
  In this form of the model the intercept $\beta_0$ is incorporated with in $StateEffects + TimeEffects$.
 
 
-# Sensitivity analysis 
+# Sensitivity analysis
 
 #Causal Inference
 
-# Discussion 
+# Discussion
 
-<span style='color:blue'> 
-Conclude your analysis in this section. You can touch on the following topics. 
-</span> 
+<span style='color:blue'>
+Conclude your analysis in this section. You can touch on the following topics.
+</span>
 
-- A brief recap of this project. 
-- Findings in the inferential analysis interpreted in the context of Project STAR. 
-- Suggestions for future research and/or policy making given your findings. 
+- A brief recap of this project.
+- Findings in the inferential analysis interpreted in the context of Project STAR.
+- Suggestions for future research and/or policy making given your findings.
 - Caveats of the current analysis.
 
 # Acknowledgement {-}
 
 <span style='color:blue'>
-By default, it is assumed that you have discussed this project with your teammates and instructors. List any other people that you have discussed this project with. 
+By default, it is assumed that you have discussed this project with your teammates and instructors. List any other people that you have discussed this project with.
 </span>
 
 # Reference {-}
@@ -316,7 +315,7 @@ Stock, J. H. and Watson, M. W. (2007). Introduction to Econometrics, 2nd ed. Bos
 
 [The fatal toll of driving to drinkL the effect of minimal legal drinking age evasion on traffic fatalities](https://www.sciencedirect.com/science/article/pii/S016762960900112X?casa_token=RO1Xe8NlkFEAAAAA:q0IMnVgFl-6EUnHrFi9i1_eGHk3N72DKVBFxnIyYzq0VfdcRoYhkSTyjjIX9qrjz6LkUszEj) This covers the issues of teens drinking and driving with a really cool GIS approach that looks at regions. Discusses the evasion of laws.
 
-[Drunk driving from an epidemiology perspective](https://www.researchgate.net/profile/James_Fell2/publication/242431276_Epidemiologic_Perspectives_on_Drunk_Driving/links/00b4953720449b1137000000.pdf) Published in the 80s, helps define the public health aspect of this question and conundrum. 
+[Drunk driving from an epidemiology perspective](https://www.researchgate.net/profile/James_Fell2/publication/242431276_Epidemiologic_Perspectives_on_Drunk_Driving/links/00b4953720449b1137000000.pdf) Published in the 80s, helps define the public health aspect of this question and conundrum.
 
 [Preventing Recidivism](https://www.sciencedirect.com/science/article/pii/S0047235297000755?casa_token=dYkm8bDafQYAAAAA:TvYyDbQ4SjB1OCIYKqp-AW8Dhr5OYSKp3aSmhLullPouRIimEjff3vFFJ7Lxyz4uxYOEiXMF)
 More thoughts on non-jail ways that drunk driving can be curbed and fatalities lowered. A bit tangential.
@@ -325,15 +324,15 @@ More thoughts on non-jail ways that drunk driving can be curbed and fatalities l
 
 [A historical review on drunk driving in the US](https://www.tandfonline.com/doi/full/10.1080/15389588.2012.656858?casa_token=nukMm9C_XSIAAAAA%3AbrRhZXddGjRjHEJXhjC6vXDTvdS1-THbcz1Af-geGmpLhRFflTGzo1dzQEX4CIj5OCWZywjsnTg) What has worked, and what hasn't? This will be an important contribution to the discussion section, as we can compare our results (Whatever they may be) to this comprehensive review.
 
-# GitHub Repository\ 
+# GitHub Repository\
 (https://github.com/cmdecesaris/207-Project-2/blob/main/Final_Document_for_Compilation.Rmd)
 
 
 # Session info {-}
 
 <span style='color:blue'>
-Report information of your `R` session for reproducibility. 
-</span> 
+Report information of your `R` session for reproducibility.
+</span>
 
 ```{r}
 sessionInfo()

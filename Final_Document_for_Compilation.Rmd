@@ -438,7 +438,7 @@ n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj"
 
 *Explain model/ outcome*
 
-```{r, echo = FALSE}
+```{r, echo = FALSE,include=FALSE}
 pan.total <- plm(log(rate
 ) ~ penalty +breath+ state + year,
 index = c("state", "year"),
@@ -453,7 +453,7 @@ summary(pan.total)
 *Explain cluster variance*
 
 
-```{r, echo = FALSE,results="hide"}
+```{r, echo = FALSE,results="hide", include=FALSE}
 coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 ```
@@ -462,7 +462,7 @@ coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 *Explain model/ outcome*
 
-```{r,echo = FALSE,results="hide"}
+```{r,echo = FALSE,results="hide", include=FALSE}
 
 pan.south <- plm(log(rate
 ) ~penalty+breath+ state + year,
@@ -477,7 +477,7 @@ coeftest(pan.south, vcov = vcovHC, type = "HC1")
 
 *Explain model/ outcome*
 
-```{r, echo = FALSE, results="hide"}
+```{r, echo = FALSE, results="hide",include=FALSE}
 
 pan.north <- plm(log(rate
 ) ~ penalty+breath+state + year,
@@ -536,11 +536,12 @@ as.data.frame(summary(reduced_model)$coefficients)
 ```
 
 ```{r, echo=FALSE}
+par(mfrow = c(1,2))
 plot_qq(reduced_model, "Reduced Model")
 plot_err_vs_fit(reduced_model, "Reduced Model")
 ```
 
-```{r}
+```{r, echo = FALSE, results="hide"}
 check.normality.assumptions(reduced_model)$`p-value`
 ```
 

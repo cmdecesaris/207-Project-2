@@ -470,7 +470,7 @@ For the fixed effects model, the following assumptions are made:
 
  A simpler, project specific version of the model using only BreathTest and Penalty for regressiors is:
 
-  $$\hat{FatalityRate}_{State, Year} = \beta_{1}^{\hat}  X_{Penalty :\ Yes} + \beta_{2}^{\hat}  X_{Breath \ Test: \ Yes} + StateEffects_{State} + TimeEffects_{Year}+ errors_{State, Year}$$
+  $$\hat{FatalityRate}_{State, Year} = \hat{\beta_{1}}  X_{Penalty :\ Yes} + \hat{\beta_{2}}  X_{Breath \ Test: \ Yes} + StateEffects_{State} + TimeEffects_{Year}+ errors_{State, Year}$$
 
  In this form of the model the intercept $\beta_0$ is incorporated within $StateEffects_{State} + TimeEffects_{Year}$.
 

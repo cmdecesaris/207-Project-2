@@ -23,6 +23,8 @@ library(DT)
 library(plm)
 library(GGally)
 library(zoo)
+library(gridExtra)
+library(grid)
 data(Fatalities)
 ```
 
@@ -32,7 +34,15 @@ data(Fatalities)
 
 Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some 
 (Perrine et al., 1989). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents 
-(Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates. Drinking age and State are both significantly correlated to the number of alcohol-related traffic fatalities, suggesting that other state laws are significant, policy-relevant, indicators. We found these predictor variables to be the most important for the years 1982, 1985, 1988: region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits. The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
+(Lovenheim & Slemrod, 2010; Mast et al., 1999). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates.  WHAT METHODS WE USED (1 SENTENCE).
+
+  - *Drinking age study (Mary) *
+
+  - *Most influential effects study (Ana) *
+We found these predictor variables to be the most important for the years 1982, 1985, 1988:
+region, income (in 1987 dollars), jail sentence, average miles per driver, and number of spirits.   
+
+The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
 
   - *Beertax (Camron)*
 
@@ -387,6 +397,62 @@ To assess whether state implemented laws had a significant effect on alcohol rel
 In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty.
 
 
+```{r, echo = FALSE, include=FALSE, results="hide"}
+ data(Fatalities)
+af=data.frame(Fatalities)
+af$rate=(af$afatal/af$pop)*10000
+
+af$penalty <- with(af, factor(jail == "yes" | service == "yes",
+labels = c("no", "yes")))
+
+southa= af%>%dplyr::filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ok","ky","wv","va"))
+
+
+n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
+```
+
+
+```{r echo=FALSE, fig.length=15, fig.width=15}
+
+southa_graph = southa%>%filter(year%in% c("1982","1988"))
+
+s_pean=ggplot(southa_graph, aes(factor(state), rate )) + geom_point(aes(shape = factor(year),color=factor(penalty)),size=5 )+labs(x="State", y="Fatality Rate",  
+       col="Penalty",shape="Year",title="Fatality Rate and Penality Policy 82,88")+  theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))+ geom_line()
+
+
+s_breath=ggplot(southa_graph, aes(factor(state), rate )) +
+  geom_point(aes( shape =factor(year),color=factor(breath)),size=5 )+geom_line()+
+  labs(x="State", y="Fatality Rate", col="Breath",shape="Year",title="Fatality Rate and Breath Test Policy 82,88")+ 
+  theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))
+
+
+grid.arrange(s_pean, s_breath, ncol=2, top = textGrob("Southern States",gp=gpar(fontsize=40,font=2)))
+
+```
+
+```{r echo=FALSE, fig.length=15, fig.width=15}
+
+
+northa_graph = n_easta%>%filter(year%in% c("1982","1988"))
+
+n_pean=ggplot(northa_graph, aes(factor(state), rate )) + geom_point(aes(shape = factor(year),color=factor(penalty)),size=5 )+labs(x="State", y="Fatality Rate",  
+       col="Penalty",shape="Year",title="Fatality Rate and Penality Policy 82,88")+  theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x =element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))+ geom_line()
+
+
+n_breath=ggplot(northa_graph, aes(factor(state), rate )) +
+  geom_point(aes( shape =factor(year),color=factor(breath)),size=5 )+geom_line()+
+  labs(x="State", y="Fatality Rate", col="Breath",shape="Year",title="Fatality Rate and Breath Test Policy 82,88")+ 
+  theme(legend.position='bottom',text = element_text(size=14,face = 'bold'),
+        axis.text.x = element_text(angle=75, hjust=1),axis.ticks.x = element_line(size=0.5))+scale_x_discrete(guide = guide_axis(n.dodge = 1),expand=c(0, 0))+  scale_color_manual(labels = c("No", "Yes"), values = c("red", "green"))
+
+
+grid.arrange(n_pean, n_breath, ncol=2, top = textGrob("Northeastern States",gp=gpar(fontsize=40,font=2)))
+
+```
+
 *Insert informative graph and brief interpretation*
 
 The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. In many ways, this is wishful thinking, as there are likely factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
@@ -424,19 +490,6 @@ For the fixed effects model, the following assumptions are made:
 
 
 
-```{r, echo = FALSE, include=FALSE, results="hide"}
- data(Fatalities)
-af=data.frame(Fatalities)
-af$rate=(af$afatal/af$pop)*10000
-
-af$penalty <- with(af, factor(jail == "yes" | service == "yes",
-labels = c("no", "yes")))
-
-southa= af%>%dplyr::filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ok","ky","wv","va"))
-
-
-n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
-```
 
 
 

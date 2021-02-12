@@ -291,7 +291,7 @@ The p-values for model 1 and 2 are greater than an alpha of 0.01. Thus we fail t
 ####  Errors vs Fitted Values
 ```{r, echo = FALSE}
 plot_err_vs_fit = function(M,y){
-plot(M$fitted.values, M$residuals, main = sprintf("Errors vs. Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors")
+plot(M$fitted.values, M$residuals, main = sprintf("Error vs Fitted Value %s", y), xlab = "Fitted Values",ylab = "Errors")
 abline(h = 0,col = "purple")
 }
 par(mfrow = c(2,2))
@@ -575,8 +575,8 @@ as.data.frame(summary(reduced_model)$coefficients)
 
 ```{r, echo=FALSE}
 par(mfrow = c(1,2))
-plot_qq(reduced_model, "Reduced Model")
-plot_err_vs_fit(reduced_model, "Reduced Model")
+plot_qq(reduced_model,"Red. Model")
+plot_err_vs_fit(reduced_model,"Red. Model")
 ```
 
 ```{r, echo = FALSE, results="hide"}

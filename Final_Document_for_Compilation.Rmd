@@ -80,6 +80,8 @@ night_legal <- Fatalities$fatal2124
 
 a_rate <-  (Fatalities$afatal/Fatalities$pop)*10000
 Fatalities <- cbind(Fatalities,a_rate)
+af=as.data.frame(Fatalities)#Christina's data
+
 ```
 
 ```{r, echo = FALSE}
@@ -385,6 +387,62 @@ For the fixed effects model, the following assumptions are made:
  $\hat{FatalityRate}_{region} = \beta_1 * Penalty + \beta_2 * BreathTest + StateEffects + TimeEffects$
 
  In this form of the model the intercept $\beta_0$ is incorporated with in $StateEffects + TimeEffects$.
+
+```{r}
+a_rate <-  (af$afatal/af$pop)*10000
+af <- cbind(af,a_rate)
+
+af$penalty <- with(af, factor(jail == "yes" | service == "yes",
+labels = c("no", "yes")))
+
+southa= af%>%dplyr::filter(state %in% c("la","ms","al","ga","sc","ar","tx","fl","nc","tn","ok","ky","wv","va"))
+
+
+n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj","de","md","pa"))
+```
+
+
+```{r}
+pan.total <- plm(log(a_rate
+) ~ penalty +breath+ state + year,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = af)
+
+summary(pan.total)
+coeftest(pan.total, vcov = vcovHC, type = "HC1")
+
+```
+
+```{r}
+
+pan.south <- plm(log(a_rate
+) ~penalty+breath+ state + year,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = southa)
+
+summary(pan.south)
+coeftest(pan.south, vcov = vcovHC, type = "HC1")
+```
+```{r}
+
+pan.north <- plm(log(a_rate
+) ~ state + year+beertax,
+index = c("state", "year"),
+model = "within",
+effect = "twoways",
+data = n_easta)
+
+summary(pan.north)
+
+
+coeftest(pan.north, vcov = vcovHC, type = "HC1")
+
+```
+
 
 
 

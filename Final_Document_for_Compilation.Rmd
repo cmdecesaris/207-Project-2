@@ -1,6 +1,6 @@
 ---
-title: "TITLE PROJECT 2"
-author: "Team 3; Group 1"
+title: "Relationship between state prevention and penalization strategies and alcohol-related traffic fatalities in the United States"
+author: "Team 3; Group 1; Ana Boeriu, Christina De Cesaris, Mary-Francis LaPorte, Cameron Shinn"
 date: "02/09/2021"
 output:
   html_document:
@@ -36,7 +36,6 @@ Alcohol-related traffic fatalities account for over a quarter of traffic-related
 
   - *Beertax (Camron)*
 
-WHAT WERE THE RESULTS (2 SENTENCES).
 
 # Introduction
 
@@ -634,25 +633,22 @@ summary(beertax_plm)
 coeftest(beertax_plm, vcov=vcovHC, type="HC1")
 ```
 
-# Sensitivity analysis
-
 # Causal Inference
 
-# Discussion
+# Conclusion
 
-<span style='color:blue'>
-Conclude your analysis in this section. You can touch on the following topics.
-</span>
-
-- A brief recap of this project.
+This project examines the relationship between state-level policies (particularly drinking age, penalties, and beer tax) and the number of alcohol-related traffic fatalities in the United States. 
 - Findings in the inferential analysis interpreted in the context of Project STAR.
-- Suggestions for future research and/or policy making given your findings.
+
 - Caveats of the current analysis.
+
+Since now the nation-wide drinking age in the United States is 21, drinking age is no longer a relevant strategy for drunk driving prevention. Beer tax does not seem to impact alcohol fatalities, which reflects the findings in previous literature (Mast et al. 1999). They found that beer tax does not impact the heaviest drinkers, which is why it may not translate well as a prevention. 
+This is a public health/epidemiology issue not just a public policy issue. Psychologists, medicine, addiction and trauma counselors may also have role in this above and beyond policy makers (Perrine et al., 1989).
 
 # Acknowledgement {-}
 
 <span style='color:blue'>
-By default, it is assumed that you have discussed this project with your teammates and instructors. List any other people that you have discussed this project with.
+This project has only been discussed within the group. 
 </span>
 
 # Reference {-}

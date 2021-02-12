@@ -20,7 +20,6 @@ library(agricolae)
 library(lme4)
 library(car)
 library(DT)
-library(AER)
 library(plm)
 library(GGally)
 library(zoo)
@@ -31,18 +30,33 @@ data(Fatalities)
 
 # Abstract
 
-Alcohol-related traffic fatalities are a serious issue in the United States, considered a public health crisis by some (Perrine, Peck, Fell). Studies have shown that the decisions of policy makers to implement laws to protect their citizens from alcohol-related traffic accidents have correlated with improvement in such accidents (Lovenheim, Slemrod; Mast, Benson, Rasmussen). This study assesses the relationship between various state laws, including alcohol tax, legal drinking age, and punishments for driving-wile-intoxicated, on alcohol fatality rates. WHAT METHODS WE USED (1 SENTENCE). WHAT WERE THE RESULTS (2 SENTENCES).
+Alcohol-related traffic fatalities account for over a quarter of traffic-related deaths in the United States, and is considered a public health crisis by some (Perrine, Peck, Fell). Studies have shown a correlation between alcohol-related traffic accidents and the implementation of laws aimed towards reducing said accidents (Lovenheim, Slemrod; Mast, Benson, Rasmussen). Data regarding alcohol related fatalities, population, and laws was collected for 48 states between 1982 and 1988. Our study analyzes this data in order to assesses the relationship between various state laws, such as alcohol tax, legal drinking age, and first-offense punishments, on alcohol fatality rates.  WHAT METHODS WE USED (1 SENTENCE).
+
+  - *Drinking age study (Mary) *
+
+  - *Most influential effects study (Ana) *
+
+The net effect of breathalyzer and first-offense punishment laws on fatalities rates, a fixed effect regression model was fit on the data holding state and year constant.
+
+  - *Beertax (Camron)*
+
+WHAT WERE THE RESULTS (2 SENTENCES).
 
 # Introduction
 
-Traffic fatalities related to alcohol consumption is a big problem in the United States. Over 10,000 people died from crashes due to driving while intoxicated in 2018, comprising nearly 30% of traffic fatalities that year. Some have likened the impact of these deaths to a public health, or epidemiological, problem given the complex social and cultural circumstances that surround this problem.  (National Highway Traffic Safety Administration). Public representatives have implemented several different types of laws to help combat this problem. These laws can be broadly defined as "decreasing opportunity", or "preventing recidivism". In other words, these laws either: 1) make it less convenient (and theoretically, less probable) that one individual would drive drunk, or 2) make the penalty so large for a first offense that a previous offender will correct their behavior the next time. Successful deterrence of driving-while-intoxicated has the potential to save the lives of many citizens.
+Traffic fatalities related to alcohol consumption is a significant cause of traffic-related death in the United States. In 2018, over 10,000 people died from crashes due to intoxicated driving, comprising nearly 30% of the year's traffic fatalities. Some researchers have likened the impact of these deaths to a epidemiological issue given the complex social and cultural circumstances that surround drinking  (National Highway Traffic Safety Administration). To help combat the problem, public representatives have implemented several different types of laws. These kinds of laws are broadly defined as "decreasing opportunity", or "preventing recidivism". In other words, these laws either: 1) make it less convenient (and theoretically, less probable) that one individual would drive drunk, or 2) make the penalty so large for a first offense that a previous offender will correct their behavior the next time. Successful deterrence of driving-while-intoxicated has the potential to save the lives of many citizens.
 
-In the 1980s, faced with the stark statistics, lawmakers implemented various laws related to, among other things, drinking age, beer tax and drunk driving penalties (Stock and Watson). These laws were accumulated and described in a data set that will be discussed in greater detail later in this report. The goal of this report is to study the efficacy of these law changes, across the United States, and over the course of the 1980s. In particular:
-- Are any law change (particularly beer tax, penalization for drunk driving, or drinking age) correlated with the improvement in alcohol-related traffic fatalities per capita?
-- Which combination of drunk-driving related variables in the data set best predict the rate of alcohol-related traffic fatalities?
-- Is it possible to imply causality between these changes and the decrease or increase of alcohol-related traffic fatalities?
+In the 1980s, faced with the stark statistics, lawmakers implemented various laws related to, among other things, drinking age, beer tax and drunk driving penalties (Stock and Watson). These laws were accumulated and described in a data set that will be discussed in greater detail later in this report. The goal of this report is to study the efficacy of these law changes, across the United States, and over the course of the 1980s.
 
-We hypothesize that alcohol-related traffic fatality will not be significantly correlated to a drinking age, beer tax, or a more-stringent sentancing for drunk driving offenses (Mast et al, Perrine, Peck, Fell). Better understanding the answers to these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
+In particular:
+
+ - Are any law change (particularly beer tax, penalization for drunk driving, or drinking age) correlated with the improvement in alcohol-related traffic fatalities per capita?
+
+ - Which combination of drunk-driving related variables in the data set best predict the rate of alcohol-related traffic fatalities?
+
+ - Is it possible to imply causality between these changes and the decrease or increase of alcohol-related traffic fatalities?
+
+We hypothesize that alcohol-related traffic fatality will *not* be significantly correlated with drinking age, beer tax, or a more-stringent sentencing for drunk driving offenses (Mast et al, Perrine, Peck, Fell). Insight regarding these these questions could help lawmakers assess the efficacy of drunk driving-related legislation on alcohol-related traffic fatalities.
 
 # Background
 
@@ -138,10 +152,11 @@ PValue <- c("<2e-16","<2e-16",5.14e-09)
 stat <- data.frame(Variable, FValue, PValue)
 
 #from Christina
+## remove options = list(sDom  = 't') to include the search and show entries pulldown!
 datatable(stat,class = 'cell-border stripe',
  caption = htmltools::tags$caption(
     style = 'caption-side: top; text-align: center;',
-    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Southern Region')), colnames= )
+    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Southern Region')),options = list(sDom  = 't'), colnames= , rownames=)
 
 anova_fat_state_north <- aov(afatal~as.factor(drinkage)*as.factor(state), data = n_east)
 summary(anova_fat_state_north)
@@ -297,7 +312,7 @@ $H_{o}:$ Residuals have equal variance   $H_{A}:$ Residuals do not have equal va
 All the models have a p-value greater than an alpha of 0.01 thus we fail to reeject the null and conclude that all the models have constant variance.
 
 ### Transformations for Model 3
-In this section we wll transform the data of Model 3 to try to correct for non-normality in the errors using the Box-Cox transformation. Box-Cox transformations uses $(Y^\lambda−1)/\lambda$ to find the lambda that maximizes log-likelihood. We found that the lambda that maximizes the log- likelihood has a value o zero which corresponds to a log transformation. Once we transform the data, we will re-fit model 3.  We chose to use the transformed data for Model 3  because that one made the data most linear, most normal, and has the most constant variance compared to no transformation. Our next step was to look for and remove any outliers so that we could further meet the assumptions of linear regression. We did find 2 outliers in model 2 and two outliers in Model 3, when using an alpha of 0.05. We also checked for leverage points, which are data points which have a large influence on the regression line. When using cook’s distance  there were no leverage points, and so in the end we concluded to not remove any data points because the outliers are not influencing the models.
+In this section we will transform the data of Model 3 to try to correct for non-normality in the errors using the Box-Cox transformation. Box-Cox transformations uses $(Y^\lambda−1)/\lambda$ to find the lambda that maximizes log-likelihood. We found that the lambda that maximizes the log- likelihood has a value o zero which corresponds to a log transformation. Once we transform the data, we will re-fit model 3.  We chose to use the transformed data for Model 3  because that one made the data most linear, most normal, and has the most constant variance compared to no transformation. Our next step was to look for and remove any outliers so that we could further meet the assumptions of linear regression. We did find 2 outliers in model 2 and two outliers in Model 3, when using an alpha of 0.05. We also checked for leverage points, which are data points which have a large influence on the regression line. When using cook’s distance  there were no leverage points, and so in the end we concluded to not remove any data points because the outliers are not influencing the models.
 
 ```{r,  echo=FALSE}
 transformData = function(data){
@@ -362,6 +377,9 @@ To assess whether state implemented laws had a significant effect on alcohol rel
 
 In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factorial called penalty.
 
+
+*Insert informative graph and brief interpretation*
+
 The breath factorial indicates whether that state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factorials appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. In many ways, this is wishful thinking, as there are likely factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
 
 Because not every state changed their laws over the time period, a linear regression model with fixed time and state effects was selected. The fixed effect model seeks to account for variability with in each fixed year and fixed state. That is, we assume there are influential factors within each state and year not accounted for in the observed data. In the fixed model:
@@ -384,14 +402,18 @@ For the fixed effects model, the following assumptions are made:
 
 - The error terms when conditioned on the aggressors, have a mean equal to zero, that is, $E(u_{it}|X_{1,it},\cdots,X_{k,it})=0$
 - The regressor terms and errors for all $i=1,\cdots,n$ are $i.i.d.$ from their joint distribution.
+
 - There is no perfect multicollinearity
 - There are not significant outliers
 
  A simpler, project specific version of the model using only BreathTest and Penalty for regressiors is:
 
- $\hat{FatalityRate}_{region} = \beta_1 * Penalty + \beta_2 * BreathTest + StateEffects + TimeEffects$
+  $$\hat{FatalityRate}_{State, Year} = \beta_1  X_{Penalty :\ Yes} + \beta_2  X_{Breath \ Test: \ Yes} + StateEffects_{State} + TimeEffects_{Year}+ errors_{State, Year}$$
 
- In this form of the model the intercept $\beta_0$ is incorporated with in $StateEffects + TimeEffects$.
+ In this form of the model the intercept $\beta_0$ is incorporated within $StateEffects_{State} + TimeEffects_{Year}$.
+
+
+
 
 ```{r}
  data(Fatalities)
@@ -408,6 +430,9 @@ n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj"
 ```
 
 
+
+*Explain model/ outcome*
+
 ```{r}
 pan.total <- plm(log(rate
 ) ~ penalty +breath+ state + year,
@@ -417,9 +442,20 @@ effect = "twoways",
 data = af)
 
 summary(pan.total)
+```
+
+
+*Explain cluster variance*
+
+
+```{r}
 coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 ```
+
+
+
+*Explain model/ outcome*
 
 ```{r}
 
@@ -433,6 +469,9 @@ data = southa)
 summary(pan.south)
 coeftest(pan.south, vcov = vcovHC, type = "HC1")
 ```
+
+*Explain model/ outcome*
+
 ```{r}
 
 pan.north <- plm(log(rate

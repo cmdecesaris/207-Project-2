@@ -11,7 +11,7 @@ output:
 knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
-```{r,echo = FALSE}
+```{r,echo = FALSE, results = "hide", include=FALSE}
 library(tidyverse)
 library(dplyr)
 library(AER)

@@ -492,6 +492,46 @@ summary(pan.north)
 coeftest(pan.north, vcov = vcovHC, type = "HC1")
 
 ```
+```{r Diagnostics}
+fit_vals <- function(mod) {
+   return (as.numeric(mod$model[[1]] - mod$residuals) )
+}
+
+par(mfrow=c(2,2))
+
+plot(fit_vals(pan.total), pan.total$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
+abline(lm(pan.total$res~fit_vals(pan.total)), col="red") 
+
+qqnorm(pan.total$res)
+qqline(pan.total$res)
+mtext("Diagnostic Plots All States", outer = TRUE, cex = 1.5)
+
+```
+```{r}
+par(mfrow=c(2,2))
+
+plot(fit_vals(pan.south), pan.south$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
+abline(lm(pan.south$res~fit_vals(pan.south)), col="red") 
+
+qqnorm(pan.south$res)
+qqline(pan.south$res)
+
+mtext("Diagnostic Plots Southern States", outer = TRUE, cex = 1.5)
+
+```
+```{r}
+par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
+
+
+plot(fit_vals(pan.north), pan.north$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
+abline(lm(pan.north$res~fit_vals(pan.north)), col="red") 
+
+qqnorm(pan.north$res)
+qqline(pan.north$res)
+
+mtext("Diagnostic Plots North Eastern States", outer = TRUE, cex = 1.5)
+
+```
 
 ## Alcohol Consumption
 

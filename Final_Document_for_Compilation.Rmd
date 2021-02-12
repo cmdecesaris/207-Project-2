@@ -95,7 +95,7 @@ plot(drinking_age,alcohol_fat)
 plot(drinking_age,night_youth)
 plot(drinking_age,night_YA)
 plot(drinking_age,night_legal)
-par(mfrow=c(1,1))
+par(mfrow=c(2,2))
 
 alc_age <- lm(a_rate~as.factor(drinking_age))
 plot(alc_age)
@@ -443,13 +443,6 @@ summary(pan.north)
 coeftest(pan.north, vcov = vcovHC, type = "HC1")
 
 ```
-
-
-
-
-
-
-
 # Sensitivity analysis
 
 #Causal Inference

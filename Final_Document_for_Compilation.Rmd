@@ -81,7 +81,7 @@ Preliminary analysis suggests that law-changes were similar between the southeas
 
 ## Drinking Age
 Based on reports from previous literature, drinking age seems to be a state's first-line of defense against alcohol-related traffic fatalities 
-(Lovenheim & Slemrod, 2010). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study.
+(Lovenheim & Slemrod, 2010). Preliminary data exploration shows that by far, the most common drinking age is 21. Drinking age is significantly related to the rate of alcohol-related traffic fatalities (see table below. State, however, also appears to be significant. This is telling because it suggests that other state laws are significantly affecting drunk driving. Because the drinking age is now 21 across the nation, this variable does not contribute actionable information to this study. The other state laws may still be actionable and warrant further study. Diagnostics confirm that distribution of drinking age is not normal. Additionally, there is an outlier will undue pull (Louisiana in 1988). 
 
 The notation for the test performed (two-way ANOVA) to determine significance of drinking age and state is as follows:
 
@@ -114,30 +114,43 @@ hist(drinking_age)
 
 ```{r, echo = FALSE, results = "hide", warning=FALSE}
 library(dplyr)
-par(mfrow=c(2,2))
-plot(drinking_age,alcohol_fat)
-plot(drinking_age,night_youth)
-plot(drinking_age,night_YA)
-plot(drinking_age,night_legal)
+#plot(drinking_age,alcohol_fat)
+#plot(drinking_age,night_youth)
+#plot(drinking_age,night_YA)
+#plot(drinking_age,night_legal)
 par(mfrow=c(2,2))
 
-alc_age <- lm(a_rate~as.factor(drinking_age))
-plot(alc_age)
+#alc_age <- lm(a_rate~as.factor(drinking_age))
+#plot(alc_age)
 
 Fatalities[281:283,]
 newdata <- Fatalities[order(-Fatalities$afatal),]
 
-anova_fat <- aov(a_rate~as.factor(drinking_age), data = Fatalities)
-summary(anova_fat)
+#anova_fat <- aov(a_rate~as.factor(drinking_age), data = Fatalities)
+#summary(anova_fat)
 
 
 anova_fat_state <- aov(a_rate~as.factor(drinking_age)*as.factor(state), data = Fatalities)
-summary(anova_fat_state)
+anova_fat_state_sum <- summary(anova_fat_state)
 
-anova_fat_state <- aov(a_rate~as.factor(drinking_age)+as.factor(state), data = Fatalities)
-summary(anova_fat_state)
+Variable <- c("Drinking Age", "State","Interaction DrinkingAge:State")
+FValue <- c(7.605,17.683,0.817)
+PValue <- c("3.27e-11","<2e-16",0.772)
+stat <- data.frame(Variable, FValue, PValue)
 
-plot(anova_fat_state)
+#from Christina
+## remove options = list(sDom  = 't') to include the search and show entries pulldown!
+datatable(stat,class = 'cell-border stripe',
+ caption = htmltools::tags$caption(
+    style = 'caption-side: top; text-align: center;',
+    'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in the entire USA')),options = list(sDom  = 't'), colnames= , rownames=)
+
+#anova_fat_state <- aov(a_rate~as.factor(drinking_age)+as.factor(state), data = Fatalities)
+#summary(anova_fat_state)
+
+
+
+plot(anova_fat_state,main = "diagnostics for drinking age")
 Fatalities[112,]
 Fatalities[211,]
 Fatalities[which(Fatalities$state == "la"),]

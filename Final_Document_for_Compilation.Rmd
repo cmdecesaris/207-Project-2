@@ -304,7 +304,7 @@ The p-values for model 1 and 2 are greater than an alpha of 0.01. Thus we fail t
 ####  Errors vs Fitted Values
 ```{r, echo = FALSE}
 plot_err_vs_fit = function(M,y){
-plot(M$fitted.values, M$residuals, main = sprintf("Errors vs. Fitted Values %s", y), xlab = "Fitted Values",ylab = "Errors")
+plot(M$fitted.values, M$residuals, main = sprintf("Error vs Fitted Value %s", y), xlab = "Fitted Values",ylab = "Errors")
 abline(h = 0,col = "purple")
 }
 par(mfrow = c(2,2))
@@ -433,7 +433,7 @@ For the fixed effects model, the following assumptions are made:
 
 
 
-```{r}
+```{r, echo = FALSE}
  data(Fatalities)
 af=data.frame(Fatalities)
 af$rate=(af$afatal/af$pop)*10000
@@ -451,7 +451,7 @@ n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj"
 
 *Explain model/ outcome*
 
-```{r}
+```{r, echo = FALSE,include=FALSE}
 pan.total <- plm(log(rate
 ) ~ penalty +breath+ state + year,
 index = c("state", "year"),
@@ -466,7 +466,7 @@ summary(pan.total)
 *Explain cluster variance*
 
 
-```{r}
+```{r, echo = FALSE,results="hide", include=FALSE}
 coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 ```
@@ -475,7 +475,7 @@ coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 *Explain model/ outcome*
 
-```{r}
+```{r,echo = FALSE,results="hide", include=FALSE}
 
 pan.south <- plm(log(rate
 ) ~penalty+breath+ state + year,
@@ -490,7 +490,7 @@ coeftest(pan.south, vcov = vcovHC, type = "HC1")
 
 *Explain model/ outcome*
 
-```{r}
+```{r, echo = FALSE, results="hide",include=FALSE}
 
 pan.north <- plm(log(rate
 ) ~ penalty+breath+state + year,
@@ -503,6 +503,44 @@ summary(pan.north)
 
 
 coeftest(pan.north, vcov = vcovHC, type = "HC1")
+
+```
+```{r Diagnostics}
+fit_vals <- function(mod) {
+   return (as.numeric(mod$model[[1]] - mod$residuals) )
+}
+
+par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
+plot(fit_vals(pan.total), pan.total$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
+abline(lm(pan.total$res~fit_vals(pan.total)), col="red") 
+
+qqnorm(pan.total$res)
+qqline(pan.total$res)
+mtext("Diagnostic Plots All States", outer = TRUE, cex = 1.5)
+
+```
+```{r}
+par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
+plot(fit_vals(pan.south), pan.south$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
+abline(lm(pan.south$res~fit_vals(pan.south)), col="red") 
+
+qqnorm(pan.south$res)
+qqline(pan.south$res)
+
+mtext("Diagnostic Plots Southern States", outer = TRUE, cex = 1.5)
+
+```
+```{r}
+par(mfrow=c(1,2),oma = c(0, 0, 2, 0))
+
+
+plot(fit_vals(pan.north), pan.north$res, main="Residuals vs Fitted", xlab="Fitted Values", ylab="Residuals")
+abline(lm(pan.north$res~fit_vals(pan.north)), col="red") 
+
+qqnorm(pan.north$res)
+qqline(pan.north$res)
+
+mtext("Diagnostic Plots North Eastern States", outer = TRUE, cex = 1.5)
 
 ```
 
@@ -549,11 +587,12 @@ as.data.frame(summary(reduced_model)$coefficients)
 ```
 
 ```{r, echo=FALSE}
-plot_qq(reduced_model, "Reduced Model")
-plot_err_vs_fit(reduced_model, "Reduced Model")
+par(mfrow = c(1,2))
+plot_qq(reduced_model,"Red. Model")
+plot_err_vs_fit(reduced_model,"Red. Model")
 ```
 
-```{r}
+```{r, echo = FALSE, results="hide"}
 check.normality.assumptions(reduced_model)$`p-value`
 ```
 

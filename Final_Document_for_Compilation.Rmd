@@ -76,6 +76,22 @@ By default, it is assumed that you have discussed this project with your teammat
 
 # Reference {-}
 
+Ruhm, C. J. (1996). Alcohol Policies and Highway Vehicle Fatalities. Journal of Health Economics, 15, 435–454.
+
+Stock, J. H. and Watson, M. W. (2007). Introduction to Econometrics, 2nd ed. Boston: Addison Wesley.
+
+[Beer taxation and Alcohol-related Traffic Fatalities](https://www.jstor.org/stable/1061141?casa_token=zFtQmEbeY_QAAAAA%3Af0JjUHvopvXG5WVl3ikDgWv863taJwuVu7kkAitlUq_bntLuMhLU7wJ8FQpv_Ajm2AOgLeZEoFDKbvuawzbt7SI5pc1w4xgPC1gcf_iIMwRNR6rXmw&seq=1#metadata_info_tab_contents ) This study explores the relationship between beer taxation and alcohol related Fatalities before 1996.
+
+[The fatal toll of driving to drinkL the effect of minimal legal drinking age evasion on traffic fatalities](https://www.sciencedirect.com/science/article/pii/S016762960900112X?casa_token=RO1Xe8NlkFEAAAAA:q0IMnVgFl-6EUnHrFi9i1_eGHk3N72DKVBFxnIyYzq0VfdcRoYhkSTyjjIX9qrjz6LkUszEj) This covers the issues of teens drinking and driving with a really cool GIS approach that looks at regions. Discusses the evasion of laws.
+
+[Drunk driving from an epidemiology perspective](https://www.researchgate.net/profile/James_Fell2/publication/242431276_Epidemiologic_Perspectives_on_Drunk_Driving/links/00b4953720449b1137000000.pdf) Published in the 80s, helps define the public health aspect of this question and conundrum. 
+
+[Preventing Recidivism](https://www.sciencedirect.com/science/article/pii/S0047235297000755?casa_token=dYkm8bDafQYAAAAA:TvYyDbQ4SjB1OCIYKqp-AW8Dhr5OYSKp3aSmhLullPouRIimEjff3vFFJ7Lxyz4uxYOEiXMF)
+More thoughts on non-jail ways that drunk driving can be curbed and fatalities lowered. A bit tangential.
+
+[Relationship between gasoline prices and drunk driving crashes](https://www.sciencedirect.com/science/article/pii/S0001457510002423?casa_token=jpNEjTLZTRAAAAAA:jfG4LsqTxl3xxVb8DihHfrBd0wrACz9922VQxe4OR1QczbXWLlyn11I0F7YWM0w1rgPdvdz_) This could be interesting for discussion. It also contains some statistics about unemployment, which is why it was included.
+
+[A historical review on drunk driving in the US](https://www.tandfonline.com/doi/full/10.1080/15389588.2012.656858?casa_token=nukMm9C_XSIAAAAA%3AbrRhZXddGjRjHEJXhjC6vXDTvdS1-THbcz1Af-geGmpLhRFflTGzo1dzQEX4CIj5OCWZywjsnTg) What has worked, and what hasn't? This will be an important contribution to the discussion section, as we can compare our results (Whatever they may be) to this comprehensive review.
 
 # Session info {-}
 

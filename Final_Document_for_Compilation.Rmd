@@ -738,6 +738,7 @@ beertax_plm <- plm(
 ```
 
 Testing our beertax coefficient we can see a p-value of `r round(coeftest(beertax_plm, vcov=vcovHC, type="HC1")[1,4], digits=2)` so we can say that *there is a non-causal relationship between beer taxes and alcohol related traffic fatalities*.
+This lines up with other findings (Mast, B., Benson, B., & Rasmussen, D.) based on this dataset, keeping our conclusion consistent.
 
 # Causal Inference
 

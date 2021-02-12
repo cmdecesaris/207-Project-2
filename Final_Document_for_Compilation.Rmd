@@ -150,7 +150,8 @@ datatable(stat,class = 'cell-border stripe',
 
 
 
-plot(anova_fat_state,main = "diagnostics for drinking age")
+plot(anova_fat_state)
+mtext("Diagnostics for Drinking Age", outer = TRUE, cex = 2)
 Fatalities[112,]
 Fatalities[211,]
 Fatalities[which(Fatalities$state == "la"),]

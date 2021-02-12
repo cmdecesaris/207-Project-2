@@ -11,6 +11,11 @@ output:
 knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
+```{r,echo = FALSE}
+library(AER)
+data(Fatalities)
+```
+
 ***
 
 # Abstract
@@ -73,7 +78,7 @@ hist(drinking_age)
 ```
 
 ```{r, echo = FALSE, results = "hide"}
-
+library(dplyr)
 par(mfrow=c(2,2))
 plot(drinking_age,alcohol_fat)
 plot(drinking_age,night_youth)
@@ -108,7 +113,6 @@ n_east= Fatalities%>%filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj"
 ```
 
 ```{r, echo = FALSE}
-
 anova_fat_state_south <- aov(afatal~as.factor(drinkage)*as.factor(state), data = south)
 anova_fat_state_south_sum <- summary(anova_fat_state_south)
 
@@ -122,8 +126,6 @@ datatable(stat,class = 'cell-border stripe',
  caption = htmltools::tags$caption(
     style = 'caption-side: top; text-align: center;',
     'Table X: ', htmltools::em('ANOVA: Alcohol-Related Traffic Fatalities in Southern Region')), colnames= )
-
-
 
 anova_fat_state_north <- aov(afatal~as.factor(drinkage)*as.factor(state), data = n_east)
 summary(anova_fat_state_north)

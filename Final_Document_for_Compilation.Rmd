@@ -373,19 +373,16 @@ After verifying the assumptions and performing transformations, we can conclude 
 
 (i) **Model 1:** $\hat{\beta_{7}}:$ When spirit consumption increases by 1 bottle, the average number of alcohol fatalities increases by 1396 accidents holding all other variables constant
 
-(ii) **Model 3:** $\hat{\beta_{3}}$ Souhtern states had  11087 more alcohol fatalities on average compared to  north eastern states, holding all other variables constant. In other words,
+(ii) **Model 3:** $\hat{\beta_{3}}$ Souhtern states had  11087 more alcohol fatalities on average compared to  northeastern states, holding all other variables constant. In other words,
 
 
 ## Fixed Regression Models for State Laws
 
-To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first subset the data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and North Eastern regions of the United States.
+To assess whether state implemented laws had a significant effect on alcohol related vehicle fatalities, we first subset the data. It is unrealistic to expect the demographic and political priorities of each state is equivalent. In a attempt to address this discrepancy, we have decided to investigate the effectiveness of jail, service, and breath laws in the Southern and Northeastern regions of the United States.
 
+In the case of this model, jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single variable called penalty. The breath factor indicates which specific state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factors appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported. In many ways, this is wishful thinking, as there are factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
 
-In the case of this model, it is important to recognize the factorial variables jail and service indicate whether a first-time drunk driving offense leads to subsequent jail time or mandatory community service. Since both service and jail time are regarded as punishments, they are combined into a single factor called penalty. The breath factor indicates which specific state currently has a law in place to allow officers to perform breath tests on drivers they pulled over. Intuitively, each of these factors appear to deter drunk driving under the assumption that the information from each state is homogeneous and fully reported.
-
-In many ways, this is wishful thinking, as there are factors not included in this data set such as vehicle sales, road quality, and number of bars per area, etc,.
-
-The following graphs illustrate this point. In most all cases, once a state implemented a breath test or penalty law, it did not revoke it in the years which followed. The state fatality rates were graphed for the starting year 1982 and ending year 1988. The points are color coded to indicate whether a breath test or penalty law is in place and shape coded to represent the year. There is no clear pattern on whether either of these laws had any effect when compared to other states. In other words we cannot determine the net effect of either law on fatality rates between even neighboring states.
+The following graphs illustrate this point. In most all cases, once a state implemented a breath test or penalty law, it remained in effect the following years. The state fatality rates were graphed for the starting year 1982 and ending year 1988. The points are color coded to indicate whether a breath test or penalty law is in place and shape coded to represent the year. There is no clear pattern on whether either of these laws had any effect when compared to other states. In other words, we cannot determine the net effect of either law on fatality rates between even neighboring states.
 
 
 ```{r, echo = FALSE, include=FALSE, results="hide"}
@@ -446,28 +443,26 @@ grid.arrange(n_pean, n_breath, ncol=2, top = textGrob("Northeastern States",gp=g
 
 
 
-Fortunately, the fixed effects regression model can be implemented to determine the net effect of breath tests and penalty laws by holding state and year constant. The fixed effect model seeks to account for variability within year and state, and allows us to work with data which changes overtime while reducing the bias which results from data with out said change. Therefore, we assume there are influential factors within each state and year not accounted for in the observed data. For this model, we will be predicting on the log transformation of the fatality rate.
+Fortunately, the fixed effects regression model can be implemented to determine the net effect of breath tests and penalty laws by holding state and year constant. The fixed effect model seeks to account for variability within year and state, and allows us to work with data which changes overtime while reducing the bias which results from data without said change. As a result, we assume there are influential factors within each state and year are not accounted for in the observed data. For this model, we will be predicting on the log transformation of the fatality rate.
 
 In the fixed model:
 
-$$Y_{it} = \beta_0 + \beta_1 X_{1,it} +\cdots+\beta_1 X_{k,it} + \gamma_2 E2 +\cdots + \gamma_n En + \delta_2 D2 + \cdots +  \delta_T DT + u_{it} .$$
+$$ln(Y_{it}) = \beta_0 + \beta_1 X_{1,it} +\cdots+\beta_1 X_{k,it} + \gamma_2 E2 +\cdots + \gamma_n En + \delta_2 D2 + \cdots +  \delta_T DT + u_{it} .$$
 
 where $t=1,...,T$ represents the year (time) and $i=1,...,n$ represents the collection of instances for each state $i$ (entity).
 
-There are n-1 dummy variables for states.
-$Ei$ represents the binary dummy variable which accounts for the fixed effect of state $i$ with its respective coefficient $\gamma_i$.
-
-There are T-1 dummy variables for years
+There are n-1 dummy variables for states, and T-1 dummy variables for years.
+$Ei$ represents the binary dummy variable which accounts for the fixed effect of state $i$ with its respective coefficient $\gamma_i$. 
 $Dt$ represents the binary dummy variable which accounts for the fixed effect of year $t$ with its respective coefficient $\delta_t$.
 
 Notice how the dummy variables $\gamma_1 E1$ and $\delta_1 D1$ are not shown in our model. These dummy variables are represented when all other dummy variables for that type are zero. For example, $\gamma_1 E_1$ is represented when $\gamma_2 E2= \cdots =\gamma_n EN=0$
 
-$u_{it}$ represents the error terms and $\beta_1 X_{k,it}$ represents the $kth$ predictor.
+$u_{it}$ represents the error terms and $\beta_1 X_{k,it}$ represents the $k^th$ predictor.
 
 For the fixed effects model, the following assumptions are made:
 
-- The error terms when conditioned on the aggressors, have a mean equal to zero, that is, $E(u_{it}|X_{1,it},\cdots,X_{k,it})=0$
-- The regressor terms and errors for all $i=1,\cdots,n$ are $i.i.d.$ from their joint distribution.
+- The error terms when conditioned on the predictors, have a mean equal to zero, that is, $E(u_{it}|X_{1,it},\cdots,X_{k,it})=0$
+- The predictor terms and errors for all $i=1,\cdots,n$ are $i.i.d.$ from their joint distribution.
 
 - There is no perfect multicollinearity
 
@@ -475,7 +470,7 @@ For the fixed effects model, the following assumptions are made:
 
  A simpler, project specific version of the model using only BreathTest and Penalty for regressiors is:
 
-  $$\hat{FatalityRate}_{State, Year} = \beta_1  X_{Penalty :\ Yes} + \beta_2  X_{Breath \ Test: \ Yes} + StateEffects_{State} + TimeEffects_{Year}+ errors_{State, Year}$$
+  $$\hat{FatalityRate}_{State, Year} = \beta_{1}^{\hat}  X_{Penalty :\ Yes} + \beta_{2}^{\hat}  X_{Breath \ Test: \ Yes} + StateEffects_{State} + TimeEffects_{Year}+ errors_{State, Year}$$
 
  In this form of the model the intercept $\beta_0$ is incorporated within $StateEffects_{State} + TimeEffects_{Year}$.
 
@@ -487,9 +482,9 @@ For the fixed effects model, the following assumptions are made:
 
  Below we calculate the cluster standard errors to test the significance of our estimates at level $\alpha=0.05$. The usage of cluster standard errors is to adjusts for serial correlation and heteroskedasticity which can invalidate standard error calculations in fixed effect regression models.
 
- The results of a fixed linear regression model on all states shows no significant effect of BreathTests or Penalty laws on drunk driving. However, as noted prior, it is unlikely that even a panel model on all fifty-states can correctly adjust for the unobsrved differences between each state and year.
+ The results of a fixed linear regression model on all states shows no significant effect of breath tests or penalty laws on drunk driving. However, as noted prior, it is unlikely that even a panel model on all fifty-states can correctly adjust for the unobsrved differences between each state and year.
 
-```{r echo=TRUE}
+```{r echo=FALSE}
 pan.total <- plm(log(rate
 ) ~ penalty +breath+ state + year,
 index = c("state", "year"),
@@ -501,7 +496,7 @@ coeftest(pan.total, vcov = vcovHC, type = "HC1")
 ```
 
 
-The fixed regression model using southern states indicates that a Penality does effect fatality rates to a significance level of $\alpha=0.05$. Unfortunately, the existence of a Penality appears to increase fatality rates while BreathTests are in-significant.
+The fixed regression model using southern states indicates that a Penality does effect fatality rates to a significance level of $\alpha=0.05$. Unfortunately, the existence of a Penality appears to increase fatality rates while BreathTests are insignificant.
 
 ```{r,echo = FALSE,results="hide", include=FALSE}
 
@@ -517,7 +512,7 @@ coeftest(pan.south, vcov = vcovHC, type = "HC1")
 
 When using northern states there appears to be a significant negative net effect of both BreathTest and Penalities on fatality rates. It is possible the effect appears in this model because in general northern states have less land area than southern states, so the odds of encountering a police officer who will enforce these laws is greater.
 
-```{r echo=TRUE, results="hide"}
+```{r echo=FALSE}
 
 pan.north <- plm(log(rate
 ) ~ penalty+breath+state + year,
@@ -571,7 +566,7 @@ abline(lm(pan.north$res~fit_vals(pan.north)), col="red")
 qqnorm(pan.north$res)
 qqline(pan.north$res)
 
-mtext("Diagnostic Plots North Eastern States", outer = TRUE, cex = 1.5)
+mtext("Diagnostic Plots Northeastern States", outer = TRUE, cex = 1.5)
 
 ```
 

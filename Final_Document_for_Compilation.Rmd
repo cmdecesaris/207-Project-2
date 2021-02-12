@@ -58,7 +58,7 @@ We hypothesize that the rate of alcohol-related traffic fatalities will *not* be
 
 The data used in this experiment was compiled by Stock and Watson for their 2007 Textbook "Introduction to Econometrics." This compilation allowed students to look at alcohol-related laws and their impact on drunk driving. This set is available through AER as the "Fatalities" data set, where it is more completely described (AER Package). The target population of the original data is all alcohol-related fatalities in the mainland 48 states during the 1980s. The population is reported from each state, along with statistics including total traffic fatalities, alcohol-related traffic fatalities by state. The "sampling" mechanism was reported accidents and fatalities available in the public domain. While some accidents may not have been reported (alcohol-related non-motor vehicle fatalities), it is relatively safe to presume that all instances were reported. Totals (for counts) or means (for values) associated with each variable were aggregated on a yearly basis by state. The variables used in this study include: "beer tax", "spirits", "drinking age", "breath indicator", "service", "jail", "miles", and "dry". "Beer tax" is the state tax imposed on beer. "Spirits" is the numeric representation of spirit consumption (higher alcohol content beverages). Drinking age is the age at which consuming or buying alcohol is legal. "Breath indicator", "jail" and "service" describe if the respective penalty is imposed in the state. Service and jail were combined into one score, known as "penalties". "Miles" is the average distance driven by a person living in that state per year. "Dry" represents the percentage of people living in a county that imposes includes alcohol restrictions.
 
-## Descriptive Analysis 
+## Descriptive Analysis
 
 The rate of alcohol-related drinking fatalities fluctuated by state over the 7 years included in this study. It appears that alcohol-related traffic fatalities decreases in most states over most year.
 
@@ -725,8 +725,6 @@ $$Y_{ij} = \beta_0 + \beta_1 X_{beertax} + \epsilon_{ij}$$
 
 Where $Y$ is the YoY difference in number of alcohol-related fatalities per 10k citizens, $\beta_0$ is the fixed effects for year and state, $\beta_1$ is the YoY difference in beer taxes and $\epsilon$ is our error term.
 
-where $t=1,...,T$ represents the year (time) and $i=1,...,n$ represents the collection of instances for each state $i$ (entity).
-
 ```{r,echo = FALSE}
 beertax_plm <- plm(
     afatalper10k ~ beertax + state + year,
@@ -736,9 +734,11 @@ beertax_plm <- plm(
     data=Fatalities_diff
 )
 
-summary(beertax_plm)
-coeftest(beertax_plm, vcov=vcovHC, type="HC1")
+# summary(beertax_plm)$coefficients
 ```
+
+Testing our beertax coefficient we can see a p-value of `r round(coeftest(beertax_plm, vcov=vcovHC, type="HC1")[1,4], digits=2)` so we can say that *there is a non-causal relationship between beer taxes and alcohol related traffic fatalities*.
+This lines up with other findings (Mast, B., Benson, B., & Rasmussen, D.) based on this dataset, keeping our conclusion consistent.
 
 # Causal Inference
 

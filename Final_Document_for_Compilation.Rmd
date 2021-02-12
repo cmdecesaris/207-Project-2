@@ -420,7 +420,7 @@ For the fixed effects model, the following assumptions are made:
 
 
 
-```{r}
+```{r, echo = FALSE}
  data(Fatalities)
 af=data.frame(Fatalities)
 af$rate=(af$afatal/af$pop)*10000
@@ -438,7 +438,7 @@ n_easta= af%>%dplyr::filter(state %in% c("me","vt","nh","ma","ny","ri","ct","nj"
 
 *Explain model/ outcome*
 
-```{r}
+```{r, echo = FALSE}
 pan.total <- plm(log(rate
 ) ~ penalty +breath+ state + year,
 index = c("state", "year"),
@@ -453,7 +453,7 @@ summary(pan.total)
 *Explain cluster variance*
 
 
-```{r}
+```{r, echo = FALSE,results="hide"}
 coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 ```
@@ -462,7 +462,7 @@ coeftest(pan.total, vcov = vcovHC, type = "HC1")
 
 *Explain model/ outcome*
 
-```{r}
+```{r,echo = FALSE,results="hide"}
 
 pan.south <- plm(log(rate
 ) ~penalty+breath+ state + year,
@@ -477,7 +477,7 @@ coeftest(pan.south, vcov = vcovHC, type = "HC1")
 
 *Explain model/ outcome*
 
-```{r}
+```{r, echo = FALSE, results="hide"}
 
 pan.north <- plm(log(rate
 ) ~ penalty+breath+state + year,

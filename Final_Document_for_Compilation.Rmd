@@ -742,16 +742,20 @@ This lines up with other findings (Mast et al., 1999) based on this dataset, kee
 
 This project examines the relationship between state-level policies (particularly drinking age, penalties, and beer tax) and the number of alcohol-related traffic fatalities in the United States.
 
-####Caveats
+Since the nation-wide drinking age in the United States is now 21, drinking age is no longer a relevant strategy for drunk driving prevention. Beer tax does not seem to impact alcohol fatalities, which reflects the findings in previous literature (Mast et al. 1999). They found that beer tax does not impact the heaviest drinkers, which is why it may not translate well as a prevention. Spirit consumption had no relation to the alcohol fatality rate in this study. This could discourage policy-makers from focusing on spirit-related laws to decrease drunk driving fatalities. 
+Model-finding analysis show that spirits were more important at the beginning of the decade, but waned towards the end of the decade. 
+Overall, both the breath test and penalty laws are insignificant when looking at the United States as a whole. Since each state is so different, further analysis focused on the regions. The south had significantly increased fatality rates with increased penalties. There is no found causitive effect between the two, and the reason behind this finding requires further investigation. In the northeastern region, both breath test and penalty laws were significantly negatively correlated with fatalities. This might be because the states are more densly populated in the northeast, so police officers could have a higher chance of encountering a drunk driver, whereas in the south drunk drivers may not encounter a police officer in a sparsly-populated area.
+
+Alcohol-related traffic fatalities are a public health/epidemiology issue not just a public policy issue. Preventing them clearly requires more than changing a drinking age, increasing taxes, or administering penalties. There are likely other factors at play, dealing with addiction and cultural values, that cannot be explored in this study. Psychologists, medicine, addiction and trauma counselors may also have role in this above and beyond policy makers (Perrine et al., 1989).
+
+#### Caveats
+
 This dataset was set up for data exploration in the context of a textbook, not in the context of a specific study or analysis. For example, beer tax and spirit consumption were included, but not beer consumption or spirit tax. Future studies looking at policy changes and drunk driving should consider this in their experimental design, and solicit the needed information. This could mean decreasing the scope and focusing on one state, or a series of counties. By including more specific measurements and incorporating the necessary considerations into the experimental design could lead to stronger conclusions.
 
-Since the nation-wide drinking age in the United States is now 21, drinking age is no longer a relevant strategy for drunk driving prevention. Beer tax does not seem to impact alcohol fatalities, which reflects the findings in previous literature (Mast et al. 1999). They found that beer tax does not impact the heaviest drinkers, which is why it may not translate well as a prevention.
-Model-finding analysis show that spirits were more important at the beginning of the decade, but waned towards the end of the decade. 
-This is a public health/epidemiology issue not just a public policy issue. Psychologists, medicine, addiction and trauma counselors may also have role in this above and beyond policy makers (Perrine et al., 1989).
 
 # Acknowledgement {-}
 
-This project has only been discussed within the group, and with the professor. Inspiration for the map figure comes from the @littlemissdata blog. 
+This project has only been discussed within the group, and with the professor. Inspiration for the map figure comes from the @littlemissdata blog. Dr. Erin Melcon’s STA 108/106 R handouts and lecture notes were referenced in this project.
 
 
 # Reference {-}
